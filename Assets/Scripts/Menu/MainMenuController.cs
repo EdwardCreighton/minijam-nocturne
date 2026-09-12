@@ -1,4 +1,5 @@
 using Nocturne.Core;
+using Nocturne.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,12 @@ namespace Nocturne.Menu
         public CreditsPanel creditsPanel;
         [Tooltip("Title + menu buttons. Hidden while credits are shown.")]
         public GameObject menuRoot;
+        [Tooltip("Чёрная шторка затемнения при переходе в уровень.")]
+        public ScreenFader fader;
+        [Tooltip("Длительность затемнения и затухания музыки при старте игры.")]
+        public float transitionFade = 1f;
+
+        private bool transitionPending;
 
         private void Start()
         {
@@ -32,7 +39,30 @@ namespace Nocturne.Menu
                 menuRoot.SetActive(true);
         }
 
-        private void OnNewGame() => AudioManager.ClickThenLoad(SceneLoader.LoadGameLevel);
+        private void OnNewGame()
+        {
+            if (transitionPending) return;
+            transitionPending = true;
+            StartCoroutine(TransitionToLevel());
+        }
+
+        /// <summary>
+        /// Клик → параллельные затемнение и затухание музыки → только потом сцена уровня.
+        /// </summary>
+        private System.Collections.IEnumerator TransitionToLevel()
+        {
+            AudioManager.Click();
+            float fade = Mathf.Max(0f, transitionFade);
+            var audio = AudioManager.Instance;
+            if (audio != null) audio.StopMusic(fade);
+            if (fader == null)
+                Debug.LogWarning("[Menu] ScreenFader is not assigned on MainMenuController — transition runs blind.");
+            if (fader != null)
+                yield return fader.FadeOut(fade);
+            else
+                yield return new WaitForSecondsRealtime(fade);
+            SceneLoader.LoadGameLevel();
+        }
 
         private void OnCredits()
         {

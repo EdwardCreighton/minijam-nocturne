@@ -121,10 +121,12 @@
 ### Структура `MainMenu.unity`
 - `Canvas`: строго `Screen Space Overlay` + `Scale With Screen Size 1280×720` (сетап форсит Overlay явно).
 - `MenuRoot` (Title + `NewGameButton` + `CreditsButton`), `CreditsPanel` (текст + `BackButton`, по умолчанию скрыта), `EventSystem` (`InputSystemUIInputModule` → actions asset проекта, карта `Player` в меню не включается).
-- `MainMenu` (пустой GO): `MainMenuController` (ссылки `newGameButton/creditsButton/backButton/creditsPanel/menuRoot`).
+- `MainMenu` (пустой GO): `MainMenuController` (ссылки `newGameButton/creditsButton/backButton/creditsPanel/menuRoot/fader` + `transitionFade 1s`).
+- `FadeOverlay` (последний ребёнок `Canvas`): чёрный `Image` alpha 0 + `ScreenFader` (затемнение при старте игры).
+- `Audio`: `AudioManager` (`Click Sound` + `musicTrack` с `playMusicOnStart`, отдельный loop-источник под музыку).
 
 ### Поведение
-- `Новая игра` → `SceneLoader.LoadGameLevel` (свежий `RunState` создаётся сценой, сброса не нужно). `Титры` → `MenuRoot` скрывается, только текст + `Назад`. `Назад` → наоборот.
+- `Новая игра` → `TransitionToLevel`: клик → параллельные `ScreenFader.FadeOut` и `AudioManager.StopMusic` (обе `transitionFade`, unscaled) → только потом `SceneLoader.LoadGameLevel`. Повторные нажатия глохнут (`transitionPending` + overlay блокирует raycast). `Титры` → `MenuRoot` скрывается, только текст + `Назад`. `Назад` → наоборот.
 - Новых кнопок не добавлять без нужды (настройки/выход вне скоупа WebGL). Правки текста титров — прямо в `CreditsText` в Inspector.
 
 ## P8. Экраны, звук, тесты (выполнено)

@@ -14,7 +14,16 @@ namespace Nocturne.Core
         [Tooltip("Короткий звук клика по кнопкам UI. Назначьте AudioClip в инспекторе.")]
         [SerializeField] private AudioClip clickSound;
 
+        [Header("Menu music")]
+        [Tooltip("Фоновый трек. Назначается только в сцене меню.")]
+        [SerializeField] private AudioClip musicTrack;
+        [Tooltip("Громкость фоновой музыки.")]
+        [SerializeField, Range(0f, 1f)] private float musicVolume = 0.7f;
+        [Tooltip("Запустить musicTrack в loop при старте сцены. Включено только в MainMenu.")]
+        [SerializeField] private bool playMusicOnStart;
+
         private AudioSource source;
+        private AudioSource musicSource;
         private bool transitionPending;
 
         private void Awake()
@@ -41,6 +50,63 @@ namespace Nocturne.Core
         {
             if (Instance == this)
                 Instance = null;
+        }
+
+        private void Start()
+        {
+            if (playMusicOnStart)
+                PlayMusic();
+        }
+
+        /// <summary>Запускает фоновый трек в loop (если назначен).</summary>
+        public void PlayMusic()
+        {
+            if (musicTrack == null) return;
+            if (musicSource == null)
+            {
+                // Отдельный источник: фейд музыки не должен глушить клики PlayOneShot.
+                musicSource = gameObject.AddComponent<AudioSource>();
+                musicSource.loop = true;
+                musicSource.playOnAwake = false;
+            }
+            musicSource.clip = musicTrack;
+            musicSource.volume = musicVolume;
+            if (!musicSource.isPlaying)
+                musicSource.Play();
+        }
+
+        /// <summary>
+        /// Плавно гасит музыку до нуля за fadeSeconds и останавливает.
+        /// Ждёт в unscaled-времени — переходы живут при timeScale = 0.
+        /// </summary>
+        public void StopMusic(float fadeSeconds = 1f)
+        {
+            if (musicSource == null || !musicSource.isPlaying) return;
+            StartCoroutine(FadeMusicOut(Mathf.Max(0f, fadeSeconds)));
+        }
+
+        private System.Collections.IEnumerator FadeMusicOut(float fadeSeconds)
+        {
+            float startVolume = musicSource.volume;
+            if (fadeSeconds <= 0f)
+            {
+                musicSource.Stop();
+                musicSource.volume = musicVolume;
+                yield break;
+            }
+            float t = 0f;
+            while (t < fadeSeconds)
+            {
+                t += Time.unscaledDeltaTime;
+                if (musicSource != null)
+                    musicSource.volume = Mathf.Lerp(startVolume, 0f, Mathf.Clamp01(t / fadeSeconds));
+                yield return null;
+            }
+            if (musicSource != null)
+            {
+                musicSource.Stop();
+                musicSource.volume = musicVolume;
+            }
         }
 
         public void PlaySwing() => PlayStub("swing");

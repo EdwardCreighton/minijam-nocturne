@@ -16,7 +16,15 @@ Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs
 - Playable scene: `Assets/Scenes/SampleScene.unity` (only scene in build list)
 - Scene template: `Assets/Settings/Scenes/URP2DSceneTemplate.unity`, `Lit2DSceneTemplate.scenetemplate`
 - Pipeline/volume: `Assets/Settings/UniversalRP.asset`, `UniversalRenderPipelineGlobalSettings.asset`, `DefaultVolumeProfile.asset`
+- Main character (added in `76a409c`): prefab at `Assets/Prefabs/Characters/MainCharacter.prefab` (SpriteRenderer + Animator), sprites in `Assets/Sprites/MainCharacter/`, animations in `Assets/Animations/`
 - No `Assets/Scripts/`, no `.asmdef`, no `*.cs` files yet — create them as needed
+
+## Main character animation (from `76a409c`, "add main character")
+
+- Single Animator Controller `Assets/Animations/MainCharacter.controller` (Base Layer only) drives the prefab's SpriteRenderer.
+- 16 clips, 4-directional (Down/Left/Right/Up) × 4 states: `MainCharacter_{Idle,Run,Attack1,Attack2}{Direction}` — each is a single-frame `.anim` (no multi-frame clips).
+- **No parameters and no transitions yet**: the state machine is a flat list of 16 states with no wiring. Any future locomotion/attack logic must add animator parameters + transitions (or drive states from code).
+- Sprites: `Assets/Sprites/MainCharacter/{IDLE,RUN,ATTACK 1,ATTACK 2}/*.png`, imported with per-state `.meta` files (single sprite per direction, no sprite sheets/animators).
 
 ## Game design (from `Docs/Concept.md` — do not contradict)
 

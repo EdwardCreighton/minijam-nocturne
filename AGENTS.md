@@ -6,7 +6,7 @@ Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs
 
 - Unity `6000.3.23f1` (`ProjectSettings/ProjectVersion.txt`)
 - URP `17.3.0` with 2D Renderer (`Assets/Settings/UniversalRP.asset`, `Renderer2D.asset`)
-- New Input System `1.20.0`, actions at `Assets/Settings/InputSystem_Actions.inputactions` (already wired in `EditorBuildSettings.asset`). Player map: `Move` / `Attack` / `Interact` (Hold `0.6s`) / `Pause` (`Esc`); menu uses `UI` map only. No settings/exit screens in scope.
+- New Input System `1.20.0`, actions at `Assets/Settings/InputSystem_Actions.inputactions` (recreated in P0, GUID `2bcd...` rewired in `EditorBuildSettings.asset`) + generated C# wrapper `InputSystem_Actions.cs` (the only input API in use). Player map: `Move` / `Attack` / `Interact` (Button, NO Hold interaction — hold `0.6s` measured by code from `BalanceConfig.holdTime`) / `Pause` (`Esc`); UI map: `Navigate/Submit/Cancel/Point/Click/ScrollWheel`. No settings/exit screens in scope.
 - 2D stack: `2d.sprite`, `2d.tilemap` + extras, `2d.animation`, `2d.spriteshape`, `2d.psdimporter`, `2d.aseprite`
 - Target platform: browser (WebGL, `1280×720` reference, Chrome/Edge/Firefox). No `Application.Quit`, no native plugins, audio only after first click; see `Docs/TZ.md` §2.1.
 - Test Framework `1.6.0` installed, no tests written yet
@@ -14,11 +14,11 @@ Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs
 
 ## Project layout
 
-- Playable scenes (2 in build, per `Docs/TZ.md`): `Assets/Scenes/MainMenu.unity` (index 0) + `Assets/Scenes/SampleScene.unity` as `GameLevel` (index 1, rename via Editor if needed)
+- Playable scenes (2 in build, per `Docs/TZ.md`): `Assets/Scenes/MainMenu.unity` (index 0, created in P0: camera + 1280×720 Canvas + EventSystem) + `Assets/Scenes/SampleScene.unity` as `GameLevel` (index 1, rename via Editor if needed, then update `SceneLoader.GameLevel`)
 - Scene template: `Assets/Settings/Scenes/URP2DSceneTemplate.unity`, `Lit2DSceneTemplate.scenetemplate`
 - Pipeline/volume: `Assets/Settings/UniversalRP.asset`, `UniversalRenderPipelineGlobalSettings.asset`, `DefaultVolumeProfile.asset`
 - Main character (added in `76a409c`): prefab at `Assets/Prefabs/Characters/MainCharacter.prefab` (SpriteRenderer + Animator), sprites in `Assets/Sprites/MainCharacter/`, animations in `Assets/Animations/`
-- No `Assets/Scripts/`, no `.asmdef`, no `*.cs` files yet — create them as needed
+- `Assets/Scripts/` (P0: `Config/BalanceConfig.cs`, `Core/SceneLoader.cs`, namespace `Nocturne.*`); no `.asmdef`. Default balance instance: `Assets/Settings/BalanceConfig.asset`. Setup guide: `Assets/SETUP.md` (update it at the end of every stage).
 
 ## Main character animation (from `76a409c`, "add main character")
 

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47c25d487776b3e4cb8cfdbb29062852, type: 3}
+  m_Name: BalanceConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Nocturne.Config.BalanceConfig
+  moveSpeed: 5
+  maxHP: 100
+  attackDamage: 25
+  attackCooldown: 0.35
+  attackArc: 90
+  attackRange: 1.2
+  damageCooldown: 0.5
+  holdTime: 0.6
+  interactRadius: 1.5
+  gateDebounce: 0.5
+  deathDelay: 1
+  difficultyN: 100
+  difficultyK: 0.25
+  difficultyM: 0.15
+  maxLevel: 5
+  tierTable: []

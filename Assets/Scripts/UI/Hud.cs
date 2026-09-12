@@ -1,18 +1,22 @@
 using Nocturne.Core;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Nocturne.UI
 {
     /// <summary>
-    /// Level HUD numbers (TZ §10). P1: Unspent / Spent(+level stub) / Deaths.
-    /// HP row and gate prompt land in P2/P4.
+    /// Level HUD numbers (TZ §10): HP / Unspent / Spent(+level) / Deaths.
+    /// hpText is wired by setup; HP updates come from PlayerHealth.HPChanged.
     /// </summary>
     public sealed class Hud : MonoBehaviour
     {
-        public Text unspentText;
-        public Text spentText;
-        public Text deathsText;
+        public TextMeshProUGUI hpText;
+        public TextMeshProUGUI unspentText;
+        public TextMeshProUGUI spentText;
+        public TextMeshProUGUI deathsText;
+
+        private Player.PlayerHealth playerHealth;
 
         // Subscription lives in Start (not Awake/OnEnable): all scene Awakes —
         // including GameManager's, which creates the RunState — run first.
@@ -21,12 +25,24 @@ namespace Nocturne.UI
             Refresh();
             if (GameManager.Instance != null)
                 GameManager.Instance.Run.Changed += Refresh;
+
+            var playerGo = GameObject.FindWithTag("Player");
+            if (playerGo != null)
+            {
+                playerHealth = playerGo.GetComponent<Player.PlayerHealth>();
+                if (playerHealth != null)
+                    playerHealth.HPChanged += RefreshHP;
+            }
+
+            RefreshHP();
         }
 
         private void OnDisable()
         {
             if (GameManager.Instance != null)
                 GameManager.Instance.Run.Changed -= Refresh;
+            if (playerHealth != null)
+                playerHealth.HPChanged -= RefreshHP;
         }
 
         private void Refresh()
@@ -42,6 +58,14 @@ namespace Nocturne.UI
             }
 
             if (deathsText != null) deathsText.text = $"Deaths: {run.Deaths}";
+        }
+
+        private void RefreshHP()
+        {
+            if (hpText == null) return;
+            hpText.text = playerHealth != null
+                ? $"HP: {playerHealth.CurrentHP}/{playerHealth.MaxHP}"
+                : "HP: —";
         }
     }
 }

@@ -1,0 +1,20 @@
+{
+    "name": "Nocturne.Tests.PlayMode",
+    "rootNamespace": "Nocturne.Tests.PlayMode",
+    "references": [
+        "Nocturne.Game",
+        "Unity.InputSystem"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

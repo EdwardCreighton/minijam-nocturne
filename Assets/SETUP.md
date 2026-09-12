@@ -126,3 +126,28 @@
 ### Поведение
 - `Новая игра` → `SceneLoader.LoadGameLevel` (свежий `RunState` создаётся сценой, сброса не нужно). `Титры` → `MenuRoot` скрывается, только текст + `Назад`. `Назад` → наоборот.
 - Новых кнопок не добавлять без нужды (настройки/выход вне скоупа WebGL). Правки текста титров — прямо в `CreditsText` в Inspector.
+
+## P8. Экраны, звук, тесты (выполнено)
+
+### Экраны уровня (`Screens` на GO `Screens` под `HudCanvas`)
+- 4 панели (дим 0.65 + текст + кнопки): `BriefingPanel` (управление/правила + `Начать`), `DeathPanel` (только текст, висит на `Dying`), `WinPanel` (статистика `FinishId/Spent/Deaths/время` + `В меню` / `Новая игра`), `PausePanel` (`Продолжить` / `В меню`). Все стартуют скрытыми, переключаются по `GameManager.StateChanged`.
+- Ран начинается в `Briefing` (мир заморожен) до `DismissBriefing`. Победа/пауза тоже замораживают время + включают `UI`-карту.
+- `EventSystem` (`InputSystemUIInputModule` → actions asset) обязателен в обеих сценах — без него кнопки мертвы для клавиатуры/геймпада.
+
+### Финиши
+- `CircleCollider2D`-триггер (`r 0.7`) на каждом `FinishPoint`; касание игроком → `OnFinishReached`. Новый финиш: компонент + триггер + уникальный `finishId`.
+
+### Звук (заглушки)
+- `AudioManager` на `GameSystems` (один `AudioSource`, методов `Play*` пишут `[Audio] id` в консоль). Вызовы вшиты: удар/попадание/гейт/смерть/победа. Настоящие клипы: Vorbis, только после первого жеста (WebGL).
+
+### Тесты (`Assets/Tests/`, Test Runner)
+- EditMode: `RunStateTests`, `DifficultyScalerTests`, `BalanceAndGateTests` (дефолты конфига + уникальность `Gate.id` в сцене).
+- PlayMode: `DeathPersistenceTests`, `HoldToOpenTests` (синтетическая клавиатура через queued state; враги чистятся для детерминизма), `FlowTests` (пауза, финиш; ожидания только unscaled — победа/смерть морозят `timeScale`).
+
+### Сборки (важно)
+- Код разделён на сборки: `Nocturne.Game` (весь рантайм), `Nocturne.Tests.EditMode/PlayMode` (только с `TestAssemblies`, в плеер не утекают), `Nocturne.Editor` (только Editor). Корневой рантайм-asmdef затягивает `Assets/Editor/` в сборку — поэтому Editor-скрипты живут только под `Nocturne.Editor.asmdef`, иначе WebGL-билд падает с `CS0234/CS0246`.
+- Одноразовые сетапы удалять сразу после прогона (они тоже ломают билд через `UnityEditor`-API).
+- Весь UI — TextMeshPro (`com.unity.textmeshpro`, шрифт по умолчанию из `TMP Settings`). Legacy `Text` не использовать.
+
+### WebGL-приёмка (TZ §2.1)
+- `Build Profiles → WebGL → Build And Run`: меню → уровень → бой/гейты/смерть/финиш без ошибок консоли в Chrome. `preloadedAssets` с actions-ассетом прописывается сам — коммитить.

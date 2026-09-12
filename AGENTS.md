@@ -26,6 +26,9 @@ Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs
 - Difficulty (P5): `Core/DifficultyScaler.cs` (static `GetLevel/HpMult/DmgMult`, spawn-time injection only), `Enemy` base stats moved to prefab fields (`Chaser 50/10/10`, `Dasher 100/20/25` + dash `2.5×/3s/0.4s`), `EnemyMover` dash, spawner `tierPrefab/tierMinLevel` (east→Dasher@2, west→Dasher@3), HUD shows `lvl`. Greybox total spend (80) < `N=100`, full tier ladder deferred to P6 map.
 - Map (P6): north hub loop (`Gate_North 60`, routes east `30/60` / west `50/60`), south farm pocket (dead end, 2 Chaser spawns), 12 spawner entries (hub→Dasher@2, west normalized @2, max spend 140 = lvl 2 cap).
 - Menu (P7): `Menu/MainMenuController.cs` + `CreditsPanel.cs`; `MainMenu.unity` has `MenuRoot` (title/buttons, hidden under credits), `CreditsPanel`, overlay Canvas, UI-wired `EventSystem`. `New Game` loads the level (fresh `RunState` by construction).
+- Level screens + audio + tests (P8): `UI/Screens.cs` (Briefing/Death/Win/Pause via `GameState.StateChanged`), `FinishPoint` trigger → `OnFinishReached` (stats + menu/new-game), `Core/AudioManager.cs` (stub `[Audio]` calls), `Hud` HP row, `Tests/EditMode` (RunState/Difficulty/defaults/gate-ids) + `Tests/PlayMode` (death persist, hold open/cancel, pause, win; unscaled waits only).
+- Assemblies (required, not optional): `Nocturne.Game` (runtime incl. generated input), `Nocturne.Tests.{EditMode,PlayMode}` (`TestAssemblies`, never in player builds), `Nocturne.Editor` (Editor-only; root game asmdef would otherwise drag `Assets/Editor/` into builds and break WebGL). One-shot setup scripts are deleted right after their run.
+- UI text is TextMeshPro everywhere (`com.unity.textmeshpro`, default TMP font); legacy `Text` is banned.
 
 ## Main character animation (from `76a409c`, "add main character")
 

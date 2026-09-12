@@ -1,0 +1,20 @@
+{
+    "name": "Nocturne.Editor",
+    "rootNamespace": "Nocturne.Editor",
+    "references": [
+        "Nocturne.Game",
+        "Unity.InputSystem",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

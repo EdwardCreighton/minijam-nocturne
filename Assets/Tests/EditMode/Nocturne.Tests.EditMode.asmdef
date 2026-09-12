@@ -1,0 +1,21 @@
+{
+    "name": "Nocturne.Tests.EditMode",
+    "rootNamespace": "Nocturne.Tests.EditMode",
+    "references": [
+        "Nocturne.Game"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

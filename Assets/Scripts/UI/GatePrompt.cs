@@ -1,5 +1,6 @@
 using Nocturne.Core;
 using Nocturne.World;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ namespace Nocturne.UI
     /// </summary>
     public sealed class GatePrompt : MonoBehaviour
     {
-        public Text promptText;
+        public TextMeshProUGUI promptText;
         public Image progressImage;
 
         private Transform player;

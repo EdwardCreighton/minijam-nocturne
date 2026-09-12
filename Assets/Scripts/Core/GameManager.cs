@@ -14,8 +14,8 @@ namespace Nocturne.Core
 
     /// <summary>
     /// Composition root of GameLevel (TZ §9, §10): owns the RunState for the whole run,
-    /// the GameState machine, gate registry, generated-input lifetime and pause.
-    /// Death flow lands in P2, enemy reset in P3, win flow in P8.
+    /// the GameState machine, gate registry, generated-input lifetime, pause,
+    /// death flow and win flow. Screens (UI) observe StateChanged.
     /// </summary>
     public sealed class GameManager : MonoBehaviour
     {
@@ -26,6 +26,8 @@ namespace Nocturne.Core
 
         public RunState Run { get; private set; } = new();
         public GameState State { get; private set; } = GameState.Playing;
+
+        public event System.Action<GameState> StateChanged;
 
         public InputSystem_Actions Input { get; private set; }
 
@@ -49,8 +51,39 @@ namespace Nocturne.Core
 
         private void Start()
         {
-            // TODO P8: enter Briefing and wait for dismiss instead.
-            State = GameState.Playing;
+            // Run starts frozen on the briefing screen until dismissed (TZ §10).
+            SetState(GameState.Briefing);
+            Time.timeScale = 0f;
+            AudioListener.pause = true;
+            Input.UI.Enable();
+        }
+
+        /// <summary>Briefing "Start" button. Resumes into Playing.</summary>
+        public void DismissBriefing()
+        {
+            if (State != GameState.Briefing) return;
+            Time.timeScale = 1f;
+            AudioListener.pause = false;
+            Input.UI.Disable();
+            SetState(GameState.Playing);
+        }
+
+        /// <summary>Finish trigger entry point (called by FinishPoint, P8).</summary>
+        public void OnFinishReached(string finishId)
+        {
+            if (State != GameState.Playing) return;
+            Run.RegisterWin(finishId);
+            if (AudioManager.Instance != null) AudioManager.Instance.PlayWin();
+            Time.timeScale = 0f;
+            AudioListener.pause = true;
+            Input.UI.Enable();
+            SetState(GameState.Win);
+        }
+
+        private void SetState(GameState state)
+        {
+            State = state;
+            StateChanged?.Invoke(state);
         }
 
         private void Update()
@@ -68,6 +101,10 @@ namespace Nocturne.Core
             if (Input != null)
             {
                 Input.Player.Pause.performed -= OnPausePerformed;
+                // The generated wrapper asserts in its finalizer that every map
+                // was Disabled: Dispose() alone is not enough (leak warning).
+                Input.Player.Disable();
+                Input.UI.Disable();
                 Input.Dispose();
                 Input = null;
             }
@@ -86,14 +123,14 @@ namespace Nocturne.Core
         {
             if (State == GameState.Playing)
             {
-                State = GameState.Paused;
+                SetState(GameState.Paused);
                 Time.timeScale = 0f;
                 AudioListener.pause = true;
                 Input.UI.Enable();
             }
             else if (State == GameState.Paused)
             {
-                State = GameState.Playing;
+                SetState(GameState.Playing);
                 Time.timeScale = 1f;
                 AudioListener.pause = false;
                 Input.UI.Disable();
@@ -114,7 +151,8 @@ namespace Nocturne.Core
         public void OnPlayerDied()
         {
             if (State != GameState.Playing) return;
-            State = GameState.Dying;
+            if (AudioManager.Instance != null) AudioManager.Instance.PlayDeath();
+            SetState(GameState.Dying);
             StartCoroutine(DeathRoutine());
         }
 
@@ -156,7 +194,7 @@ namespace Nocturne.Core
             var cam = FindFirstObjectByType<FollowCam>();
             if (cam != null) cam.Snap();
 
-            State = GameState.Playing;
+            SetState(GameState.Playing);
         }
     }
 }

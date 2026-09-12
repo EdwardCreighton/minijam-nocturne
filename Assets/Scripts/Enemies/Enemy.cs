@@ -44,7 +44,7 @@ namespace Nocturne.Enemies
         {
             var gm = GameManager.Instance;
             if (gm != null) gm.Run.AddKill(ScoreValue);
-            if (AudioManager.Instance != null) AudioManager.Instance.PlayHit();
+            AudioManager.Hit();
             Died?.Invoke(this);
             Destroy(gameObject);
         }

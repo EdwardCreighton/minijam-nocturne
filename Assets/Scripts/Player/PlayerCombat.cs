@@ -66,7 +66,7 @@ namespace Nocturne.Player
             }
 
             visual.PlayAttack();
-            if (AudioManager.Instance != null) AudioManager.Instance.PlaySwing();
+            AudioManager.Swing();
         }
     }
 }

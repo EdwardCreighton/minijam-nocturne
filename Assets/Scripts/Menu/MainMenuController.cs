@@ -32,19 +32,18 @@ namespace Nocturne.Menu
                 menuRoot.SetActive(true);
         }
 
-        private void OnNewGame()
-        {
-            SceneLoader.LoadGameLevel();
-        }
+        private void OnNewGame() => AudioManager.ClickThenLoad(SceneLoader.LoadGameLevel);
 
         private void OnCredits()
         {
+            AudioManager.Click();
             if (menuRoot != null) menuRoot.SetActive(false);
             if (creditsPanel != null) creditsPanel.Show();
         }
 
         private void OnBack()
         {
+            AudioManager.Click();
             if (creditsPanel != null) creditsPanel.Hide();
             if (menuRoot != null) menuRoot.SetActive(true);
         }

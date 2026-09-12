@@ -73,7 +73,7 @@ namespace Nocturne.Core
         {
             if (State != GameState.Playing) return;
             Run.RegisterWin(finishId);
-            if (AudioManager.Instance != null) AudioManager.Instance.PlayWin();
+            AudioManager.Win();
             Time.timeScale = 0f;
             AudioListener.pause = true;
             Input.UI.Enable();
@@ -151,7 +151,7 @@ namespace Nocturne.Core
         public void OnPlayerDied()
         {
             if (State != GameState.Playing) return;
-            if (AudioManager.Instance != null) AudioManager.Instance.PlayDeath();
+            AudioManager.Death();
             SetState(GameState.Dying);
             StartCoroutine(DeathRoutine());
         }

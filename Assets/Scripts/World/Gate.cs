@@ -50,7 +50,7 @@ namespace Nocturne.World
             if (!run.TrySpend(cost, id)) return false;
             SetOpen(true);
             Opened?.Invoke(this);
-            if (AudioManager.Instance != null) AudioManager.Instance.PlayGateOpen();
+            AudioManager.GateOpen();
             return true;
         }
 

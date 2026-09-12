@@ -138,7 +138,7 @@
 - `CircleCollider2D`-триггер (`r 0.7`) на каждом `FinishPoint`; касание игроком → `OnFinishReached`. Новый финиш: компонент + триггер + уникальный `finishId`.
 
 ### Звук (заглушки)
-- `AudioManager` на `GameSystems` (один `AudioSource`, методов `Play*` пишут `[Audio] id` в консоль). Вызовы вшиты: удар/попадание/гейт/смерть/победа. Настоящие клипы: Vorbis, только после первого жеста (WebGL).
+- `AudioManager` на `GameSystems` + отдельном `Audio` в `MainMenu` (один `AudioSource`, `ignoreListenerPause`, поле `Click Sound` — клип назначается в обеих сценах). Методы `Play*` без клипов пишут `[Audio] id` в консоль. Вызовы вшиты: удар/попадание/гейт/смерть/победа. Кнопки: клик через `AudioManager.Click()`, переходы между сценами через `ClickThenLoad()` (задержка `0.12s` realtime, иначе `LoadScene` обрежет звук); разовые кнопки — компонент `UiClickSound` (не дублировать с явными вызовами). Настоящие клипы: Vorbis, только после первого жеста (WebGL).
 
 ### Тесты (`Assets/Tests/`, Test Runner)
 - EditMode: `RunStateTests`, `DifficultyScalerTests`, `BalanceAndGateTests` (дефолты конфига + уникальность `Gate.id` в сцене).

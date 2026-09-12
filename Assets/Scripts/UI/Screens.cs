@@ -34,15 +34,15 @@ namespace Nocturne.UI
             if (gm == null) return;
 
             if (briefingStartButton != null)
-                briefingStartButton.onClick.AddListener(() => gm.DismissBriefing());
+                briefingStartButton.onClick.AddListener(() => { AudioManager.Click(); gm.DismissBriefing(); });
             if (pauseResumeButton != null)
-                pauseResumeButton.onClick.AddListener(() => gm.TogglePause());
+                pauseResumeButton.onClick.AddListener(() => { AudioManager.Click(); gm.TogglePause(); });
             if (pauseMenuButton != null)
-                pauseMenuButton.onClick.AddListener(SceneLoader.LoadMainMenu);
+                pauseMenuButton.onClick.AddListener(() => AudioManager.ClickThenLoad(SceneLoader.LoadMainMenu));
             if (winMenuButton != null)
-                winMenuButton.onClick.AddListener(SceneLoader.LoadMainMenu);
+                winMenuButton.onClick.AddListener(() => AudioManager.ClickThenLoad(SceneLoader.LoadMainMenu));
             if (winNewGameButton != null)
-                winNewGameButton.onClick.AddListener(SceneLoader.LoadGameLevel);
+                winNewGameButton.onClick.AddListener(() => AudioManager.ClickThenLoad(SceneLoader.LoadGameLevel));
 
             gm.StateChanged += OnStateChanged;
             OnStateChanged(gm.State);

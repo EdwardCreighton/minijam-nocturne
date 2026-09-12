@@ -3,15 +3,19 @@ using UnityEngine;
 namespace Nocturne.Core
 {
     /// <summary>
-    /// Sound stub (P8): central API + silent AudioSource so call sites exist and
-    /// can be verified. Real clips replace the Debug.Log calls; no native plugins,
-    /// first audible sound only after the first user gesture (TZ §2.1).
+    /// Central sound API: UI click is real (Click Sound clip, assigned per scene),
+    /// gameplay sounds are still stubs writing [Audio] id to the console (P8).
+    /// No native plugins, first audible sound only after the first user gesture (TZ §2.1).
     /// </summary>
     public sealed class AudioManager : MonoBehaviour
     {
         public static AudioManager Instance { get; private set; }
 
+        [Tooltip("Короткий звук клика по кнопкам UI. Назначьте AudioClip в инспекторе.")]
+        [SerializeField] private AudioClip clickSound;
+
         private AudioSource source;
+        private bool transitionPending;
 
         private void Awake()
         {
@@ -21,10 +25,16 @@ namespace Nocturne.Core
                 return;
             }
 
-            Instance = this;
             source = GetComponent<AudioSource>();
             if (source == null)
                 source = gameObject.AddComponent<AudioSource>();
+            source.playOnAwake = false;
+            // UI-клики слышны при AudioListener.pause (пауза/брифинг/победа).
+            // Заодно не глушатся будущие джинглы победы/смерти: GameManager ставит
+            // pause сразу после PlayWin/PlayDeath. Побочный эффект: будущие боевые
+            // клипы (swing/hit) тоже будут игнорировать паузу — осознанно, в паузе боя нет.
+            source.ignoreListenerPause = true;
+            Instance = this;
         }
 
         private void OnDestroy()
@@ -38,7 +48,103 @@ namespace Nocturne.Core
         public void PlayGateOpen() => PlayStub("gate_open");
         public void PlayDeath() => PlayStub("death");
         public void PlayWin() => PlayStub("win");
-        public void PlayClick() => PlayStub("click");
+        public void PlayClick()
+        {
+            if (clickSound != null && source != null)
+            {
+                source.PlayOneShot(clickSound);
+                return;
+            }
+            PlayStub("click");
+        }
+
+        /// <summary>
+        /// Null-safe точки входа. Единственное место, откуда зовут звук, —
+        /// вместо копий `if (Instance != null)` по контроллерам.
+        /// </summary>
+        public static void Click()
+        {
+            if (Instance != null)
+                Instance.PlayClick();
+        }
+
+        public static void Swing()
+        {
+            if (Instance != null)
+                Instance.PlaySwing();
+        }
+
+        public static void Hit()
+        {
+            if (Instance != null)
+                Instance.PlayHit();
+        }
+
+        public static void GateOpen()
+        {
+            if (Instance != null)
+                Instance.PlayGateOpen();
+        }
+
+        public static void Death()
+        {
+            if (Instance != null)
+                Instance.PlayDeath();
+        }
+
+        public static void Win()
+        {
+            if (Instance != null)
+                Instance.PlayWin();
+        }
+
+        /// <summary>
+        /// Клик + отложенная смена сцены: синхронный LoadScene уничтожает
+        /// AudioSource в конце кадра и обрезает звук, поэтому ждём долю секунды.
+        /// Без явной задержки ждём длину клипа + 0.05с (минимум 0.05с).
+        /// Ждём в реальном времени — переходы происходят при timeScale = 0
+        /// (пауза/победа). Повторные вызовы до завершения перехода игнорируются.
+        /// Если AudioManager отсутствует — грузим сразу.
+        /// </summary>
+        public static void ClickThenLoad(System.Action loadAction, float delaySeconds = -1f)
+        {
+            if (Instance != null)
+            {
+                float d = delaySeconds < 0f && Instance.clickSound != null
+                    ? Mathf.Max(0.05f, Instance.clickSound.length + 0.05f)
+                    : Mathf.Max(0f, delaySeconds);
+                Instance.PlayClickThenLoad(loadAction, d);
+            }
+            else
+            {
+                loadAction?.Invoke();
+            }
+        }
+
+        private void PlayClickThenLoad(System.Action loadAction, float delaySeconds)
+        {
+            PlayClick();
+            if (loadAction == null || transitionPending) return;
+            transitionPending = true;
+            StartCoroutine(LoadAfterDelay(loadAction, delaySeconds));
+        }
+
+        private static System.Collections.IEnumerator LoadAfterDelay(System.Action loadAction, float delay)
+        {
+            yield return new WaitForSecondsRealtime(Mathf.Max(0f, delay));
+            try
+            {
+                loadAction.Invoke();
+            }
+            finally
+            {
+                // При успешной загрузке объект умрёт вместе с корутиной; сброс нужен
+                // на случай, если сцена не сменилась (исключение), — иначе кнопки
+                // переходов навсегда перестанут грузить.
+                if (Instance != null)
+                    Instance.transitionPending = false;
+            }
+        }
 
         private void PlayStub(string id)
         {

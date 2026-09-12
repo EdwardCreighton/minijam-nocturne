@@ -25,3 +25,23 @@
 ### Слои физики (задел под P2–P3)
 - Использовать слои `Player`, `Enemy`, `World`, `Gate` (создать в `Tags and Layers`, если отсутствуют).
 - Матрица (`Project Settings → Physics 2D`): `Player ↔ World/Gate/Enemy`, `Enemy ↔ World`; атака игрока бьёт только `Enemy`, контактный урон — только `Player`.
+
+## P1. Каркас рана + грейбокс (выполнено)
+
+### Повторная генерация ввода (фикс P0)
+- Композиты `WASD`/`Arrows` из P0 — невалидны (таких composite-типов нет, резолвинг падал). Переписано на `2DVector(mode=1)` с частями `Up/Down/Left/Right` + отдельно `<Gamepad>/leftStick`. Шрифт HUD — `LegacyRuntime.ttf` (`Arial.ttf` больше не доступен как builtin).
+- Проверка после любых правок `.inputactions`: в импорте не должно быть `InvalidOperationException while resolving binding`.
+
+### Слои (назначены в `TagManager`, матрица — кодом)
+- Индексы: `6 = Player`, `7 = Enemy`, `8 = World`, `9 = Gate` (константы `Nocturne.Core.Layers`).
+- Матрица применяется в `GameManager.Awake` через `Layers.ApplyCollisionMatrix()` (единственное исключение: `Enemy ↔ Enemy` не сталкиваются; закрытые гейты блокируют всех). Ручную матрицу в Project Settings не править.
+
+### Грейбокс `SampleScene` (схема, вид сверху, X → восток)
+- Центр `(0,0)`: `StartPoint`, стартовая комната 12×8.
+- Восток (дешёвый маршрут): коридор `x 6→10`, `Gate_East` (`id gate_east`, `cost 30`), комната, `Finish_East` (`id finish_east`) в `(17,0)`.
+- Запад (дорогой маршрут): зеркально, `Gate_West` (`id gate_west`, `cost 50`), `Finish_West` в `(-17,0)`.
+- Стены — `BoxCollider2D` на слое `World` (префикс `Wall_`); гейты — `BoxCollider2D 0.5×2` на слое `Gate` + компонент `Gate` (id/cost/isOpen).
+- `GameSystems`: `GameManager` (синглтон сцены, владеет `RunState` + `InputSystem_Actions`, `GameState`, пауза) + `AttemptResetter`.
+- `Main Camera` + `FollowCam` (target назначится в P2 на игрока; `Snap()` — для респауна).
+- `HudCanvas` (Screen Space Overlay, 1280×720): `Hud` + 3 `Text` (Points/Spent/Deaths). `EventSystem` пока НЕТ (кнопок нет до P8).
+- Новый гейт: дублировать `Gate_East/West`, задать уникальные `id` + `cost`, слой `Gate`. Дубли `id` ловятся EditMode-тестом (P8).

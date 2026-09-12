@@ -18,7 +18,8 @@ Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs
 - Scene template: `Assets/Settings/Scenes/URP2DSceneTemplate.unity`, `Lit2DSceneTemplate.scenetemplate`
 - Pipeline/volume: `Assets/Settings/UniversalRP.asset`, `UniversalRenderPipelineGlobalSettings.asset`, `DefaultVolumeProfile.asset`
 - Main character (added in `76a409c`): prefab at `Assets/Prefabs/Characters/MainCharacter.prefab` (SpriteRenderer + Animator), sprites in `Assets/Sprites/MainCharacter/`, animations in `Assets/Animations/`
-- `Assets/Scripts/` (P0: `Config/BalanceConfig.cs`, `Core/SceneLoader.cs`, namespace `Nocturne.*`); no `.asmdef`. Default balance instance: `Assets/Settings/BalanceConfig.asset`. Setup guide: `Assets/SETUP.md` (update it at the end of every stage).
+- `Assets/Scripts/` (P0: `Config/BalanceConfig.cs`, `Core/SceneLoader.cs`; P1: `Core/RunState.cs` (plain class, sole economy owner), `Core/GameManager.cs` (+`GameState`, scene singleton, owns input + pause), `Core/Layers.cs` (6/7/8/9 + runtime collision matrix), `Core/FollowCam.cs`, `World/StartPoint.cs`, `World/FinishPoint.cs`, `World/Gate.cs` (data + collider toggle), `World/AttemptResetter.cs`, `UI/Hud.cs` (Points/Spent/Deaths); namespace `Nocturne.*`); no `.asmdef`. Default balance instance: `Assets/Settings/BalanceConfig.asset`. Setup guide: `Assets/SETUP.md` (update it at the end of every stage).
+- `SampleScene` greybox (P1): `GameSystems`, `StartPoint`, `Gate_East (30)` / `Gate_West (50)`, `Finish_East` / `Finish_West`, `Wall_*` colliders, `HudCanvas`. Input composites fixed to `2DVector(mode=1)` (P0 `WASD`/`Arrows` paths were invalid).
 
 ## Main character animation (from `76a409c`, "add main character")
 

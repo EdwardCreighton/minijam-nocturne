@@ -115,3 +115,14 @@
 - Южный фарм-карман `x -3..3, y -10..-4.5` (тупик, 2 точки Chaser).
 - Спавнер: 12 точек (3 центр + 2 восток + 2 запад + 2 карман + 3 хаб). Тиры: восток/запад/хаб → Dasher@2, центр/карман — всегда Chaser.
 - Новый гейт/стена: именовать `Gate_*/Wall_*`, слой `Gate`/`World`, гейту — `SpriteRenderer`-бар. После ручных правок стен проверять обход пешком: дыры наружу и затыки ловятся только плей-тестом.
+
+## P7. Главное меню (выполнено)
+
+### Структура `MainMenu.unity`
+- `Canvas`: строго `Screen Space Overlay` + `Scale With Screen Size 1280×720` (сетап форсит Overlay явно).
+- `MenuRoot` (Title + `NewGameButton` + `CreditsButton`), `CreditsPanel` (текст + `BackButton`, по умолчанию скрыта), `EventSystem` (`InputSystemUIInputModule` → actions asset проекта, карта `Player` в меню не включается).
+- `MainMenu` (пустой GO): `MainMenuController` (ссылки `newGameButton/creditsButton/backButton/creditsPanel/menuRoot`).
+
+### Поведение
+- `Новая игра` → `SceneLoader.LoadGameLevel` (свежий `RunState` создаётся сценой, сброса не нужно). `Титры` → `MenuRoot` скрывается, только текст + `Назад`. `Назад` → наоборот.
+- Новых кнопок не добавлять без нужды (настройки/выход вне скоупа WebGL). Правки текста титров — прямо в `CreditsText` в Inspector.

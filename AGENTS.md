@@ -25,6 +25,7 @@ Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs
 - Gates (P4): `Gate.TryOpen` (atomic spend + `Opened` event, blue→pale-green placeholder visual), `PlayerInteractor` hold logic (only spend path, resets on release/exit/damage/death/pause, debounce, nearest-gate priority), `UI/GatePrompt.cs` (cost/missing text + hold bar); both greybox gates have `SpriteRenderer` bars.
 - Difficulty (P5): `Core/DifficultyScaler.cs` (static `GetLevel/HpMult/DmgMult`, spawn-time injection only), `Enemy` base stats moved to prefab fields (`Chaser 50/10/10`, `Dasher 100/20/25` + dash `2.5×/3s/0.4s`), `EnemyMover` dash, spawner `tierPrefab/tierMinLevel` (east→Dasher@2, west→Dasher@3), HUD shows `lvl`. Greybox total spend (80) < `N=100`, full tier ladder deferred to P6 map.
 - Map (P6): north hub loop (`Gate_North 60`, routes east `30/60` / west `50/60`), south farm pocket (dead end, 2 Chaser spawns), 12 spawner entries (hub→Dasher@2, west normalized @2, max spend 140 = lvl 2 cap).
+- Menu (P7): `Menu/MainMenuController.cs` + `CreditsPanel.cs`; `MainMenu.unity` has `MenuRoot` (title/buttons, hidden under credits), `CreditsPanel`, overlay Canvas, UI-wired `EventSystem`. `New Game` loads the level (fresh `RunState` by construction).
 
 ## Main character animation (from `76a409c`, "add main character")
 

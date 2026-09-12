@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_Wobble
+  m_Name: DoorWobble
   m_Shader: {fileID: -6465566751694194690, guid: 662f058d5abb3ea478929071b5030a40, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -53,7 +53,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _NoiseScale: 5.73
+    - _Power: 36.8
+    - _Speed: 0.1
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

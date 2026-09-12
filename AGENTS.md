@@ -1,19 +1,20 @@
 # AGENTS.md — nocturne-gamejam
 
-Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs/Concept.md` (in Russian). Single scene, no gameplay code yet.
+Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs/Concept.md` (in Russian). Programmer spec: `Docs/TZ.md` (in Russian, must not contradict Concept). Two scenes (menu + level), no gameplay code yet.
 
 ## Stack (verified)
 
 - Unity `6000.3.23f1` (`ProjectSettings/ProjectVersion.txt`)
 - URP `17.3.0` with 2D Renderer (`Assets/Settings/UniversalRP.asset`, `Renderer2D.asset`)
-- New Input System `1.20.0`, actions at `Assets/Settings/InputSystem_Actions.inputactions` (already wired in `EditorBuildSettings.asset`)
+- New Input System `1.20.0`, actions at `Assets/Settings/InputSystem_Actions.inputactions` (already wired in `EditorBuildSettings.asset`). Player map: `Move` / `Attack` / `Interact` (Hold `0.6s`) / `Pause` (`Esc`); menu uses `UI` map only. No settings/exit screens in scope.
 - 2D stack: `2d.sprite`, `2d.tilemap` + extras, `2d.animation`, `2d.spriteshape`, `2d.psdimporter`, `2d.aseprite`
+- Target platform: browser (WebGL, `1280×720` reference, Chrome/Edge/Firefox). No `Application.Quit`, no native plugins, audio only after first click; see `Docs/TZ.md` §2.1.
 - Test Framework `1.6.0` installed, no tests written yet
 - Remote: `https://github.com/EdwardCreighton/minijam-nocturne.git`, branch `master`
 
 ## Project layout
 
-- Playable scene: `Assets/Scenes/SampleScene.unity` (only scene in build list)
+- Playable scenes (2 in build, per `Docs/TZ.md`): `Assets/Scenes/MainMenu.unity` (index 0) + `Assets/Scenes/SampleScene.unity` as `GameLevel` (index 1, rename via Editor if needed)
 - Scene template: `Assets/Settings/Scenes/URP2DSceneTemplate.unity`, `Lit2DSceneTemplate.scenetemplate`
 - Pipeline/volume: `Assets/Settings/UniversalRP.asset`, `UniversalRenderPipelineGlobalSettings.asset`, `DefaultVolumeProfile.asset`
 - Main character (added in `76a409c`): prefab at `Assets/Prefabs/Characters/MainCharacter.prefab` (SpriteRenderer + Animator), sprites in `Assets/Sprites/MainCharacter/`, animations in `Assets/Animations/`
@@ -28,12 +29,12 @@ Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs
 
 ## Game design (from `Docs/Concept.md` — do not contradict)
 
-- Top-down slasher in one large continuous location: zones differ visually but connect seamlessly, no loading screens or hard borders. Prefer a single scene; do not split zones into separate Unity scenes.
+- Top-down slasher in one large continuous location: zones differ visually but connect seamlessly, no loading screens or hard borders. Prefer a single scene; do not split zones into separate Unity scenes. Only allowed split: `MainMenu` ↔ `GameLevel` (see `Docs/TZ.md` §4).
 - One fixed Start (spawn after start and after every death); several alternative Finishes — reaching any one ends the run. Different Finishes need different routes/gate costs.
-- Loop: explore → kill enemies → earn points → choose route → open gates → enemy difficulty rises → explore further. Death: respawn at Start and grind through already-opened area again.
+- Loop: explore → kill enemies → earn points → choose route → open gates (Hold `Interact` `0.6s`, radius `1.5`, atomic `TrySpend`, progress ring) → enemy difficulty rises → explore further. Death: respawn at Start and grind through already-opened area again. Pause (`Player/Pause` on `Esc`) is mandatory: `TogglePause` + `Time.timeScale`.
 - Gates (door / portal / barrier / organic — any form): each has its own point cost, player picks which to open. An opened gate stays open forever, including after death.
-- Points are both currency and progress/difficulty metric. Kills grant them; opening a gate subtracts its cost from the unspent balance.
-- Difficulty = total points ever **spent** on gates. It only grows, never resets — express via enemy stats, new types, group composition, or behavior.
+- Points are both currency and progress/difficulty metric. Kills grant them; opening a gate subtracts its cost from the unspent balance. Single owner: `RunState` (`Unspent`, `SpentTotal`, `OpenedGateIds`; no wallet class).
+- Difficulty = total points ever **spent** on gates. It only grows, never resets — express via enemy stats, new types, group composition, or behavior. Starter defaults: `N=100, K=0.25, M=0.15, maxLevel=5` (see `Docs/TZ.md` §8.2).
 - Death persistence (implement run-persistent vs attempt-local state separately):
 
   | State | After death |
@@ -46,7 +47,7 @@ Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs
 ## How to work
 
 - No README, no build scripts, no CI, no `npm`/`dotnet` commands. All build/test runs go through the Unity Editor (open this folder as the project).
-- Play: open `SampleScene.unity`. Build target list = `EditorBuildSettings.asset` `m_Scenes`.
+- Play: open `SampleScene.unity` (direct level debug creates a default `RunState`); real flow starts from `MainMenu.unity`. Build target list = `EditorBuildSettings.asset` `m_Scenes`.
 - Tests: Test Framework package only; run via Editor Test Runner (EditMode/PlayMode). Note `.gitignore` excludes `InitTestScene*.unity*` — PlayMode test scenes are ephemeral.
 - Game-jam scope: prefer small MonoBehaviour scripts under `Assets/Scripts/`; add an `.asmdef` only if compile-time separation is actually needed.
 
@@ -57,3 +58,4 @@ Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs
 - `Assets/*.unity` and `*.asset` files are YAML — editable by hand for small merges, but prefer the Editor/Inspector for pipeline, renderer, and volume changes.
 - URP 2D lighting requires the 2D Renderer (`Renderer2D.asset`) and 2D lights; default 3D lights/shaders will not behave as expected.
 - Input: use the existing `InputSystem_Actions.inputactions` asset; do not add legacy `Input.GetAxis` paths or a second actions asset without reason.
+- Input maps: `MainMenu` uses the `UI` map only, `GameLevel` uses the `Player` map (`SwitchCurrentActionMap`); `Pause` lives in `Player`, `UI/Cancel` is menu-only.

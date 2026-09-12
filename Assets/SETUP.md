@@ -45,3 +45,18 @@
 - `Main Camera` + `FollowCam` (target назначится в P2 на игрока; `Snap()` — для респауна).
 - `HudCanvas` (Screen Space Overlay, 1280×720): `Hud` + 3 `Text` (Points/Spent/Deaths). `EventSystem` пока НЕТ (кнопок нет до P8).
 - Новый гейт: дублировать `Gate_East/West`, задать уникальные `id` + `cost`, слой `Gate`. Дубли `id` ловятся EditMode-тестом (P8).
+
+## P2. Игрок (выполнено)
+
+### Префаб `MainCharacter` (правился скриптом, руками не трогать структуру)
+- Корень: тег `Player`, слой `Player (6)`, `Rigidbody2D` (Kinematic, Continuous, `gravityScale 0`, `FreezeRotation`), `CapsuleCollider2D` (`0.6×0.8`, vertical).
+- Скрипты на корне: `PlayerController` (движение `MovePosition`, скорость из конфига, `LastDirection`), `PlayerCombat` (арка по последнему `Move`, кулдаун, бьёт слой `Enemy` через `IDamageable`), `PlayerHealth` (`HP` + `damageCooldown`, смерть → `GameManager.OnPlayerDied`), `PlayerInteractor` (пока только поиск ближайшего гейта + `CancelHold`; холд в P4), `PlayerVisual` (см. ниже).
+- Спрайт/аниматор остаются на ребенке `Animations` — не переносить.
+
+### Аниматор (подход: code-driven)
+- Состояние `MainCharacter_Attack1Upanim` переименовано в `MainCharacter_Attack1Up` (была опечатка в ассете). Переходов/параметров НЕ добавлять — `PlayerVisual` переключает 16 состояний через `Animator.Play()` по имени (`MainCharacter_{Idle,Run,Attack1,Attack2}{Down,Left,Right,Up}`), атаки чередуются 1/2.
+- Проверка в Editor: Play → WASD двигает, `Run`-спрайт по направлению; Enter/LMB — `Attack`-спрайт; камера следует.
+
+### Смерть/респаун
+- `GameManager.OnPlayerDied` → `Dying` → задержка `deathDelay` (unscaled, паузой не прерывается) → `Unspent=0`, `Deaths++` → позиция `StartPoint`, `rb.position` + нулевая скорость, `ResetHP`, `CancelHold`, `FollowCam.Snap()` → `Playing`. Пересоздание врагов — в P3.
+- Инстанс игрока в `SampleScene` — на `StartPoint (0,0,0)`, `FollowCam.target` привязан. Второго игрока не спавнить (синглтон сцены).

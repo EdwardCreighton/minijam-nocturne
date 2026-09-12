@@ -15,11 +15,14 @@ namespace Nocturne.Core
     /// <summary>
     /// Composition root of GameLevel (TZ §9, §10): owns the RunState for the whole run,
     /// the GameState machine, gate registry, generated-input lifetime and pause.
-    /// Death/Win flows are orchestrated here (player/enemy hooks land in P2/P3/P8).
+    /// Death flow lands in P2, enemy reset in P3, win flow in P8.
     /// </summary>
     public sealed class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
+
+        [Tooltip("Assigned by setup; all balance numbers come from here.")]
+        public Config.BalanceConfig config;
 
         public RunState Run { get; private set; } = new();
         public GameState State { get; private set; } = GameState.Playing;
@@ -101,6 +104,57 @@ namespace Nocturne.Core
         private void OnPausePerformed(InputAction.CallbackContext _)
         {
             TogglePause();
+        }
+
+        /// <summary>
+        /// Player death entry point (called by PlayerHealth). Runs the P2 death flow:
+        /// unscaled delay → wipe Unspent → respawn at Start with full HP → resume.
+        /// Enemy reset lands in P3 (TODO).
+        /// </summary>
+        public void OnPlayerDied()
+        {
+            if (State != GameState.Playing) return;
+            State = GameState.Dying;
+            StartCoroutine(DeathRoutine());
+        }
+
+        private System.Collections.IEnumerator DeathRoutine()
+        {
+            var delay = config != null ? config.deathDelay : 1f;
+            yield return new WaitForSecondsRealtime(Mathf.Max(0f, delay));
+
+            Run.ResetAttempt();
+            Run.RegisterDeath();
+
+            var resetter = GetComponent<World.AttemptResetter>();
+            var spawn = resetter != null ? resetter.RespawnPosition() : Vector3.zero;
+
+            var playerGo = GameObject.FindWithTag("Player");
+            if (playerGo != null)
+            {
+                var rb = playerGo.GetComponent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    rb.position = spawn;
+                    rb.linearVelocity = Vector2.zero;
+                }
+                else
+                {
+                    playerGo.transform.position = spawn;
+                }
+
+                var health = playerGo.GetComponent<Player.PlayerHealth>();
+                if (health != null) health.ResetHP();
+                var interactor = playerGo.GetComponent<Player.PlayerInteractor>();
+                if (interactor != null) interactor.CancelHold();
+            }
+
+            // TODO P3: recreate enemies at their spawn points here.
+
+            var cam = FindFirstObjectByType<FollowCam>();
+            if (cam != null) cam.Snap();
+
+            State = GameState.Playing;
         }
     }
 }

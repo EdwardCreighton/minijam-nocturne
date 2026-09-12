@@ -48,11 +48,5 @@ namespace Nocturne.Enemies
             Died?.Invoke(this);
             Destroy(gameObject);
         }
-
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, 0.4f);
-        }
     }
 }

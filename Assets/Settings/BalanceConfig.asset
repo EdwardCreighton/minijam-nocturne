@@ -17,13 +17,13 @@ MonoBehaviour:
   attackDamage: 25
   attackCooldown: 0.35
   attackArc: 90
-  attackRange: 1.2
+  attackRange: 1.5
   damageCooldown: 0.5
   holdTime: 0.6
   interactRadius: 1.5
   gateDebounce: 0.5
   deathDelay: 1
-  difficultyN: 100
+  difficultyN: 50
   difficultyK: 0.25
   difficultyM: 0.15
   maxLevel: 5

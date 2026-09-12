@@ -1,6 +1,6 @@
 # AGENTS.md — nocturne-gamejam
 
-Fresh Unity 6 game-jam project. Single scene, no gameplay code yet.
+Unity 6 top-down slasher set in a nightmare-dream. Design source of truth: `Docs/Concept.md` (in Russian). Single scene, no gameplay code yet.
 
 ## Stack (verified)
 
@@ -17,6 +17,23 @@ Fresh Unity 6 game-jam project. Single scene, no gameplay code yet.
 - Scene template: `Assets/Settings/Scenes/URP2DSceneTemplate.unity`, `Lit2DSceneTemplate.scenetemplate`
 - Pipeline/volume: `Assets/Settings/UniversalRP.asset`, `UniversalRenderPipelineGlobalSettings.asset`, `DefaultVolumeProfile.asset`
 - No `Assets/Scripts/`, no `.asmdef`, no `*.cs` files yet — create them as needed
+
+## Game design (from `Docs/Concept.md` — do not contradict)
+
+- Top-down slasher in one large continuous location: zones differ visually but connect seamlessly, no loading screens or hard borders. Prefer a single scene; do not split zones into separate Unity scenes.
+- One fixed Start (spawn after start and after every death); several alternative Finishes — reaching any one ends the run. Different Finishes need different routes/gate costs.
+- Loop: explore → kill enemies → earn points → choose route → open gates → enemy difficulty rises → explore further. Death: respawn at Start and grind through already-opened area again.
+- Gates (door / portal / barrier / organic — any form): each has its own point cost, player picks which to open. An opened gate stays open forever, including after death.
+- Points are both currency and progress/difficulty metric. Kills grant them; opening a gate subtracts its cost from the unspent balance.
+- Difficulty = total points ever **spent** on gates. It only grows, never resets — express via enemy stats, new types, group composition, or behavior.
+- Death persistence (implement run-persistent vs attempt-local state separately):
+
+  | State | After death |
+  |---|---|
+  | Position | reset to Start |
+  | Unspent points | reset to 0 |
+  | Spent points / difficulty | kept, never decreases |
+  | Opened gates | kept open |
 
 ## How to work
 

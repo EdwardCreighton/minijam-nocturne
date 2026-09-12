@@ -78,7 +78,7 @@ namespace Nocturne.World
         {
             Gizmos.color = isOpen ? Color.gray : Color.red;
             Gizmos.DrawWireCube(transform.position, GetComponent<Collider2D>() is BoxCollider2D box
-                ? (Vector3)box.size
+                ? (Vector3)box.size * 2
                 : new Vector3(1f, 3f, 0f));
         }
     }

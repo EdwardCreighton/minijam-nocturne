@@ -120,5 +120,18 @@ namespace Nocturne.Enemies
                     deadQueue.Add(entry);
             }
         }
+
+        private void OnDrawGizmos()
+        {
+            if (entries == null) return;
+            foreach (var entry in entries)
+            {
+                if (entry == null) continue;
+                Gizmos.color = entry.prefab == null ? Color.gray : Color.red;
+                Gizmos.DrawWireSphere(entry.position, 0.4f);
+                Gizmos.DrawLine(entry.position + Vector3.left * 0.4f, entry.position + Vector3.right * 0.4f);
+                Gizmos.DrawLine(entry.position + Vector3.down * 0.4f, entry.position + Vector3.up * 0.4f);
+            }
+        }
     }
 }

@@ -39,6 +39,15 @@ namespace Nocturne.Config
         public int maxLevel = 5;
         public List<TierEntry> tierTable = new();
 
+        [Header("Enemies (Chaser = P3 weak type)")]
+        public int chaserHP = 50;
+        public int chaserDamage = 10;
+        public int chaserScore = 10;
+        public float enemySpeed = 2.5f;
+        public float enemyAggroRadius = 6f;
+        public float enemyAttackRadius = 1f;
+        public float enemyAttackCooldown = 1f;
+
         private void OnValidate()
         {
             moveSpeed = Mathf.Max(0.1f, moveSpeed);
@@ -56,6 +65,13 @@ namespace Nocturne.Config
             difficultyK = Mathf.Max(0f, difficultyK);
             difficultyM = Mathf.Max(0f, difficultyM);
             maxLevel = Mathf.Max(1, maxLevel);
+            chaserHP = Mathf.Max(1, chaserHP);
+            chaserDamage = Mathf.Max(1, chaserDamage);
+            chaserScore = Mathf.Max(0, chaserScore);
+            enemySpeed = Mathf.Max(0.1f, enemySpeed);
+            enemyAggroRadius = Mathf.Max(0.5f, enemyAggroRadius);
+            enemyAttackRadius = Mathf.Max(0.2f, enemyAttackRadius);
+            enemyAttackCooldown = Mathf.Max(0.1f, enemyAttackCooldown);
         }
 
         [Serializable]

@@ -37,7 +37,7 @@ namespace Nocturne.Player
             if (IsMoving) LastDirection = move.normalized;
 
             var speed = gm.config != null ? gm.config.moveSpeed : 5f;
-            rb.MovePosition(rb.position + move * speed * Time.fixedDeltaTime);
+            MovementUtil.TryMove(rb, move * speed * Time.fixedDeltaTime);
         }
     }
 }

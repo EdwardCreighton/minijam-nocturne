@@ -149,7 +149,9 @@ namespace Nocturne.Core
                 if (interactor != null) interactor.CancelHold();
             }
 
-            // TODO P3: recreate enemies at their spawn points here.
+            // Full-HP recreation at initial points; gates are untouched (TZ §9).
+            foreach (var spawner in FindObjectsByType<Enemies.EnemySpawner>(FindObjectsSortMode.None))
+                spawner.RespawnAll();
 
             var cam = FindFirstObjectByType<FollowCam>();
             if (cam != null) cam.Snap();

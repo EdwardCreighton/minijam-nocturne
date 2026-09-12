@@ -60,3 +60,22 @@
 ### Смерть/респаун
 - `GameManager.OnPlayerDied` → `Dying` → задержка `deathDelay` (unscaled, паузой не прерывается) → `Unspent=0`, `Deaths++` → позиция `StartPoint`, `rb.position` + нулевая скорость, `ResetHP`, `CancelHold`, `FollowCam.Snap()` → `Playing`. Пересоздание врагов — в P3.
 - Инстанс игрока в `SampleScene` — на `StartPoint (0,0,0)`, `FollowCam.target` привязан. Второго игрока не спавнить (синглтон сцены).
+
+## P3. Враг Chaser + очки + респаун (выполнено)
+
+### Префаб `Chaser` (`Assets/Prefabs/Enemies/Chaser.prefab`)
+- Корень: слой `Enemy (7)`, `Rigidbody2D` (Kinematic, Continuous), `CircleCollider2D` (`r 0.4`).
+- Скрипты: `Enemy` (HP/урон/очки, `Initialize` с множителями, смерть → `RunState.AddKill`), `EnemyMover` (chase в агро `6`, separation), `EnemyAttack` (дистанционная проверка ≤ `1.0`, кулдаун `1с` — коллизий kinematic-kinematic нет, поэтому без колбэков).
+- Визуал ВРЕМЕННЫЙ: `idle_down.png` с красным тинтом. Заменить артом врага, скрипты не трогать. Стартовые цифры (`50/10/10`) — поля `BalanceConfig` (`chaserHP/Damage/Score` + `enemySpeed/Aggro/AttackRadius/AttackCooldown`).
+
+### Спавнер (`EnemySpawner` в `SampleScene`)
+- 7 точек: 3 центр + 2 восток + 2 запад (см. `entries` в Inspector). `respawnDelay = 0` (пополнение только через смерть игрока — цикл фарма по концепту).
+- Смерть игрока → `GameManager.DeathRoutine` → `RespawnAll()` (все пересозданы с полным HP, гейты не тронуты).
+- Новый тип врага (P5): новый префаб + добавить `entries`, смерть сама маппится на свою точку (`origin`).
+
+### Движение и стены (фикс ревью P3)
+- Тела кинематические: голый `MovePosition` проходил бы сквозь стены. Все движение идет через `Nocturne.Core.MovementUtil.TryMove` (sweep `Rigidbody2D.Cast` по слоям `World|Gate` + скольжение по осям). Новые движущиеся сущности — только через него.
+
+### Уроки сетапа (повторяющиеся грабли)
+- `SaveAsPrefabAsset` требует существующую папку — создавать через `AssetDatabase.CreateFolder` заранее.
+- Headless-batchmode упирается в лицензию (`com.unity.editor.headless was not found`, виснет). Если повторяется — сетап-скрипты запускать из Editor через `[MenuItem("Nocturne/Setup/...")]`, batchmode только для проверки компиляции.

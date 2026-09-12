@@ -28,3 +28,10 @@ MonoBehaviour:
   difficultyM: 0.15
   maxLevel: 5
   tierTable: []
+  chaserHP: 50
+  chaserDamage: 10
+  chaserScore: 10
+  enemySpeed: 2.5
+  enemyAggroRadius: 6
+  enemyAttackRadius: 1
+  enemyAttackCooldown: 1

@@ -6,14 +6,21 @@ namespace Nocturne.Enemies
     /// <summary>
     /// Simple top-down chase (TZ §6.1): idle until the player enters aggro radius,
     /// then MovePosition toward the player with steering separation from other
-    /// enemies. No pathfinding — physics slide handles corners.
+    /// enemies. No pathfinding — wall slide (MovementUtil) handles corners.
+    /// Optional periodic dash (Dasher type): dashSpeedMult &gt; 1 enables it.
     /// Moves only while GameState is Playing.
     /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     public sealed class EnemyMover : MonoBehaviour
     {
+        [Header("Dash (1 = off)")]
+        public float dashSpeedMult = 1f;
+        public float dashInterval = 3f;
+        public float dashDuration = 0.4f;
+
         private Rigidbody2D rb;
         private Transform player;
+        private float dashTimer;
 
         private void Awake()
         {
@@ -37,7 +44,17 @@ namespace Nocturne.Enemies
 
             var dir = toPlayer.normalized + Separation() * 0.7f;
             if (dir.sqrMagnitude < 0.0001f) return;
-            MovementUtil.TryMove(rb, dir.normalized * speed * Time.fixedDeltaTime);
+
+            var speedMult = 1f;
+            if (dashSpeedMult > 1f)
+            {
+                dashTimer += Time.fixedDeltaTime;
+                var cycle = Mathf.Max(0.1f, dashInterval) + Mathf.Max(0f, dashDuration);
+                if (dashTimer >= cycle) dashTimer = 0f;
+                if (dashTimer >= dashInterval) speedMult = dashSpeedMult;
+            }
+
+            MovementUtil.TryMove(rb, dir.normalized * speed * speedMult * Time.fixedDeltaTime);
         }
 
         private Vector2 Separation()

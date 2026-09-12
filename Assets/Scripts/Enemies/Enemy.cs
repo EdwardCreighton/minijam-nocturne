@@ -6,11 +6,17 @@ namespace Nocturne.Enemies
 {
     /// <summary>
     /// Enemy body: HP, contact damage value, kill score (TZ §6.1).
-    /// Difficulty multipliers are injected by the spawner at spawn time (P5);
+    /// Base stats are per-prefab fields (TZ §11: balance via SO + prefab fields);
+    /// difficulty multipliers are injected by the spawner at spawn time (P5);
     /// live enemies are never re-scaled. Death pays score via RunState.AddKill.
     /// </summary>
     public sealed class Enemy : MonoBehaviour, IDamageable
     {
+        [Header("Base stats (per type, tuned per prefab)")]
+        public int baseHP = 50;
+        public int baseDamage = 10;
+        public int baseScore = 10;
+
         public int ScoreValue { get; private set; }
         public int Damage { get; private set; }
         public int CurrentHP { get; private set; }
@@ -18,19 +24,10 @@ namespace Nocturne.Enemies
 
         public event System.Action<Enemy> Died;
 
-        private EnemyMover mover;
-        private EnemyAttack attacker;
-
-        private void Awake()
-        {
-            mover = GetComponent<EnemyMover>();
-            attacker = GetComponent<EnemyAttack>();
-        }
-
         /// <summary>Called once by the spawner right after instantiation.</summary>
-        public void Initialize(int baseHP, int baseDamage, int score, float hpMult, float dmgMult)
+        public void Initialize(float hpMult, float dmgMult)
         {
-            ScoreValue = Mathf.Max(0, score);
+            ScoreValue = Mathf.Max(0, baseScore);
             Damage = Mathf.Max(1, Mathf.RoundToInt(baseDamage * Mathf.Max(1f, dmgMult)));
             CurrentHP = Mathf.Max(1, Mathf.RoundToInt(baseHP * Mathf.Max(1f, hpMult)));
         }

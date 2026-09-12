@@ -18,6 +18,9 @@ namespace Nocturne.Enemies
         {
             public GameObject prefab;
             public Vector3 position;
+            [Tooltip("If set and current difficulty level >= tierMinLevel, spawn this instead.")]
+            public GameObject tierPrefab;
+            [Min(1)] public int tierMinLevel = 2;
         }
 
         public List<SpawnEntry> entries = new();
@@ -78,23 +81,29 @@ namespace Nocturne.Enemies
         private void SpawnOne(SpawnEntry entry)
         {
             if (entry == null || entry.prefab == null) return;
-            var go = Instantiate(entry.prefab, entry.position, Quaternion.identity);
+
+            // Difficulty is evaluated per spawn (never re-scaled live): stats mults
+            // plus group composition via tierPrefab (TZ §8.2).
+            var gm = GameManager.Instance;
+            var cfg = gm != null ? gm.config : null;
+            var spent = gm != null ? gm.Run.SpentTotal : 0;
+            var level = DifficultyScaler.GetLevel(spent, cfg);
+            var prefab = entry.tierPrefab != null && level >= Mathf.Max(1, entry.tierMinLevel)
+                ? entry.tierPrefab
+                : entry.prefab;
+
+            var go = Instantiate(prefab, entry.position, Quaternion.identity);
             var enemy = go.GetComponent<Enemy>();
             if (enemy == null)
             {
-                Debug.LogError($"EnemySpawner: prefab {entry.prefab.name} has no Enemy.", this);
+                Debug.LogError($"EnemySpawner: prefab {prefab.name} has no Enemy.", this);
                 Destroy(go);
                 return;
             }
 
-            // P3: base stats (mult 1,1). P5 injects DifficultyScaler multipliers here.
-            var gm = GameManager.Instance;
-            var cfg = gm != null ? gm.config : null;
             enemy.Initialize(
-                cfg != null ? cfg.chaserHP : 50,
-                cfg != null ? cfg.chaserDamage : 10,
-                cfg != null ? cfg.chaserScore : 10,
-                1f, 1f);
+                DifficultyScaler.GetHpMult(level, cfg),
+                DifficultyScaler.GetDmgMult(level, cfg));
 
             alive.Add(enemy);
             origin[enemy] = entry;

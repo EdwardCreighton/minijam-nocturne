@@ -31,10 +31,16 @@ namespace Nocturne.UI
 
         private void Refresh()
         {
-            var run = GameManager.Instance != null ? GameManager.Instance.Run : null;
-            if (run == null) return;
+            var gm = GameManager.Instance;
+            if (gm == null) return;
+            var run = gm.Run;
             if (unspentText != null) unspentText.text = $"Points: {run.Unspent}";
-            if (spentText != null) spentText.text = $"Spent: {run.SpentTotal}";
+            if (spentText != null)
+            {
+                var level = DifficultyScaler.GetLevel(run.SpentTotal, gm.config);
+                spentText.text = $"Spent: {run.SpentTotal} (lvl {level})";
+            }
+
             if (deathsText != null) deathsText.text = $"Deaths: {run.Deaths}";
         }
     }

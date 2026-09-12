@@ -1159,18 +1159,32 @@ MonoBehaviour:
   entries:
   - prefab: {fileID: 4899669906953774209, guid: 86f9325332ab1574181f8735d98aae0f, type: 3}
     position: {x: 2, y: 1, z: 0}
+    tierPrefab: {fileID: 0}
+    tierMinLevel: 2
   - prefab: {fileID: 4899669906953774209, guid: 86f9325332ab1574181f8735d98aae0f, type: 3}
     position: {x: -2, y: -1, z: 0}
+    tierPrefab: {fileID: 0}
+    tierMinLevel: 2
   - prefab: {fileID: 4899669906953774209, guid: 86f9325332ab1574181f8735d98aae0f, type: 3}
     position: {x: 3, y: -2, z: 0}
+    tierPrefab: {fileID: 0}
+    tierMinLevel: 2
   - prefab: {fileID: 4899669906953774209, guid: 86f9325332ab1574181f8735d98aae0f, type: 3}
     position: {x: 14, y: 1, z: 0}
+    tierPrefab: {fileID: 4231129638871520136, guid: a01e4a9c145c787489d3234048b2f900, type: 3}
+    tierMinLevel: 2
   - prefab: {fileID: 4899669906953774209, guid: 86f9325332ab1574181f8735d98aae0f, type: 3}
     position: {x: 16, y: -2, z: 0}
+    tierPrefab: {fileID: 4231129638871520136, guid: a01e4a9c145c787489d3234048b2f900, type: 3}
+    tierMinLevel: 2
   - prefab: {fileID: 4899669906953774209, guid: 86f9325332ab1574181f8735d98aae0f, type: 3}
     position: {x: -14, y: 0, z: 0}
+    tierPrefab: {fileID: 4231129638871520136, guid: a01e4a9c145c787489d3234048b2f900, type: 3}
+    tierMinLevel: 3
   - prefab: {fileID: 4899669906953774209, guid: 86f9325332ab1574181f8735d98aae0f, type: 3}
     position: {x: -16, y: 1, z: 0}
+    tierPrefab: {fileID: 4231129638871520136, guid: a01e4a9c145c787489d3234048b2f900, type: 3}
+    tierMinLevel: 3
   respawnDelay: 0
   maxAlive: 20
 --- !u!4 &670404177

@@ -5,7 +5,7 @@ namespace Nocturne.World
 {
     /// <summary>
     /// A проход (door/portal/barrier): unique stable id, point cost, permanent openness (TZ §7).
-    /// P1: data + collider toggle + self-registration. Hold/spend/prompt land in P4.
+    /// Hold/spend is driven by PlayerInteractor; this owns data, collision and visuals.
     /// </summary>
     public sealed class Gate : MonoBehaviour
     {
@@ -14,12 +14,17 @@ namespace Nocturne.World
         [Min(1)] public int cost = 30;
         public bool isOpen;
 
+        public event System.Action<Gate> Opened;
+
         private Collider2D blocker;
+        private SpriteRenderer visual;
 
         private void Awake()
         {
             blocker = GetComponent<Collider2D>();
+            visual = GetComponent<SpriteRenderer>();
             ApplyCollision();
+            ApplyVisual();
         }
 
         private void Start()
@@ -38,17 +43,34 @@ namespace Nocturne.World
 
         public bool CanOpen(int unspent) => !isOpen && unspent >= cost;
 
+        /// <summary>Atomic spend + open. Returns false if funds/conditions changed mid-hold.</summary>
+        public bool TryOpen(RunState run)
+        {
+            if (run == null || !CanOpen(run.Unspent)) return false;
+            if (!run.TrySpend(cost, id)) return false;
+            SetOpen(true);
+            Opened?.Invoke(this);
+            return true;
+        }
+
         public void SetOpen(bool open)
         {
             isOpen = open;
             ApplyCollision();
-            // TODO P4: swap visual/animation for open state.
+            ApplyVisual();
         }
 
         private void ApplyCollision()
         {
             if (blocker != null)
                 blocker.enabled = !isOpen;
+        }
+
+        private void ApplyVisual()
+        {
+            if (visual == null) return;
+            // Placeholder: closed = solid blue, open = faded. Real art replaces colors, not logic.
+            visual.color = isOpen ? new Color(0.3f, 1f, 0.3f, 0.25f) : new Color(0.3f, 0.5f, 1f, 1f);
         }
 
         private void OnDrawGizmos()

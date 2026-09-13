@@ -111,6 +111,7 @@ namespace Nocturne.Core
 
         public void PlaySwing() => PlayCombatConfigured("swing", isPlayer: true);
         public void PlayEnemyAttack() => PlayCombatConfigured("enemy_attack", isPlayer: false);
+        public void PlayFootsteps() => PlayFootstepsConfigured();
         public void PlayHit() => PlayStub("hit");
         public void PlayGateOpen() => PlayStub("gate_open");
         public void PlayDeath() => PlayStub("death");
@@ -145,6 +146,12 @@ namespace Nocturne.Core
         {
             if (Instance != null)
                 Instance.PlayEnemyAttack();
+        }
+
+        public static void Footsteps()
+        {
+            if (Instance != null)
+                Instance.PlayFootsteps();
         }
 
         public static void Hit()
@@ -237,6 +244,43 @@ namespace Nocturne.Core
                 return;
             }
             PlayStub(stubId);
+        }
+
+        /// <summary>
+        /// Footstep one-shot from the main config, played at footstepsPitch.
+        /// PlayOneShot has no pitch parameter, so the source pitch is set for
+        /// the call and restored right after (the one-shot captures it).
+        /// </summary>
+        private int footstepIndex;
+
+        private void PlayFootstepsConfigured()
+        {
+            var cfg = GameManager.Instance != null ? GameManager.Instance.config : null;
+            var clip = PickNextFootstep(cfg != null ? cfg.footstepsSounds : null);
+            if (clip == null || source == null)
+            {
+                PlayStub("footsteps");
+                return;
+            }
+            source.pitch = cfg != null ? Mathf.Max(0.1f, cfg.footstepsPitch) : 1f;
+            source.PlayOneShot(clip, cfg != null ? cfg.combatVolume : 1f);
+            source.pitch = 1f;
+        }
+
+        /// <summary>
+        /// Round-robin pick: plays clips in array order, 1..N, 1..N.
+        /// Empty slots are skipped; null when nothing playable is assigned.
+        /// </summary>
+        private AudioClip PickNextFootstep(AudioClip[] clips)
+        {
+            if (clips == null || clips.Length == 0) return null;
+            for (var i = 0; i < clips.Length; i++)
+            {
+                var clip = clips[footstepIndex % clips.Length];
+                footstepIndex++;
+                if (clip != null) return clip;
+            }
+            return null;
         }
 
         private void PlayStub(string id)

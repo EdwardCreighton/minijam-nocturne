@@ -16,6 +16,7 @@ namespace Nocturne.Player
         public bool IsMoving { get; private set; }
 
         private Rigidbody2D rb;
+        private float stepTimer;
 
         private void Awake()
         {
@@ -38,6 +39,21 @@ namespace Nocturne.Player
 
             var speed = gm.config != null ? gm.config.moveSpeed : 5f;
             MovementUtil.TryMove(rb, move * speed * Time.fixedDeltaTime);
+
+            if (IsMoving)
+            {
+                stepTimer -= Time.fixedDeltaTime;
+                if (stepTimer <= 0f)
+                {
+                    var interval = gm.config != null ? gm.config.footstepsInterval : 0.25f;
+                    stepTimer = Mathf.Max(0.05f, interval);
+                    AudioManager.Footsteps();
+                }
+            }
+            else
+            {
+                stepTimer = 0f;
+            }
         }
     }
 }

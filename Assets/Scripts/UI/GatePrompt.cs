@@ -8,7 +8,7 @@ namespace Nocturne.UI
 {
     /// <summary>
     /// Contextual gate prompt (TZ §7.1, §10): shows while the player stands near a
-    /// closed gate — «держи E — открыть (cost)» or the missing-funds variant —
+    /// closed gate — "Hold E — open (cost)" or the missing-funds variant —
     /// plus a hold progress ring/bar. Screen-space, follows nothing (single target).
     /// </summary>
     public sealed class GatePrompt : MonoBehaviour
@@ -52,8 +52,8 @@ namespace Nocturne.UI
             if (promptText != null)
             {
                 promptText.text = missing <= 0
-                    ? $"Держи E — открыть ({gate.cost})"
-                    : $"Держи E — открыть ({gate.cost}), не хватает {missing}";
+                    ? $"Hold E — open ({gate.cost})"
+                    : $"Hold E — open ({gate.cost}), missing {missing}";
             }
 
             if (progressImage != null)

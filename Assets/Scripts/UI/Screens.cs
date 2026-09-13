@@ -66,11 +66,11 @@ namespace Nocturne.UI
             {
                 var run = gm.Run;
                 var time = Mathf.FloorToInt(run.RunTime);
-                winText.text = $"Финиш: {run.FinishId}\nПотрачено: {run.SpentTotal}\nСмертей: {run.Deaths}\nВремя: {time / 60:00}:{time % 60:00}";
+                winText.text = $"Finish: {run.FinishId}\nSpent: {run.SpentTotal}\nDeaths: {run.Deaths}\nTime: {time / 60:00}:{time % 60:00}";
             }
 
             if (state == GameState.Dying && deathText != null)
-                deathText.text = "Ты погиб. Сон начинается заново...";
+                deathText.text = "You died. The dream starts over...";
         }
 
         private static void SetActive(GameObject go, bool active)

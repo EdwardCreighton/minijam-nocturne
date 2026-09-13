@@ -65,6 +65,12 @@ namespace Nocturne.Config
         public AudioClip enemyAttackSound;
         [Tooltip("Volume for combat one-shots.")]
         [Range(0f, 1f)] public float combatVolume = 1f;
+        [Tooltip("Footstep one-shots, played in array order per step (1..N, 1..N). Empty slots are skipped; if none assigned, falls back to the [Audio] stub.")]
+        public AudioClip[] footstepsSounds = System.Array.Empty<AudioClip>();
+        [Tooltip("Playback speed (pitch) of the footstep clip.")]
+        [Min(0.1f)] public float footstepsPitch = 1f;
+        [Tooltip("Seconds between footsteps while moving. Shorter than the clip length overlaps steps.")]
+        [Min(0.05f)] public float footstepsInterval = 0.25f;
 
         private void OnValidate()
         {
@@ -94,6 +100,8 @@ namespace Nocturne.Config
             enemyAttackRadius = Mathf.Max(0.2f, enemyAttackRadius);
             enemyAttackCooldown = Mathf.Max(0.1f, enemyAttackCooldown);
             combatVolume = Mathf.Clamp01(combatVolume);
+            footstepsPitch = Mathf.Max(0.1f, footstepsPitch);
+            footstepsInterval = Mathf.Max(0.05f, footstepsInterval);
         }
 
         [Serializable]

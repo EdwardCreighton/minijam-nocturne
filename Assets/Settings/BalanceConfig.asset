@@ -42,3 +42,8 @@ MonoBehaviour:
   playerAttackSound: {fileID: 8300000, guid: 8578d68afc9e9ba448f8d7799d7f7af6, type: 3}
   enemyAttackSound: {fileID: 8300000, guid: bef1ba9fe32409243b56218b67b99e4d, type: 3}
   combatVolume: 1
+  footstepsSounds:
+  - {fileID: 8300000, guid: c05f412c763c8aa40990f4dd448f83ca, type: 3}
+  - {fileID: 8300000, guid: ef4303796cdfa3248b81bdf139a45e82, type: 3}
+  footstepsPitch: 20
+  footstepsInterval: 0.2

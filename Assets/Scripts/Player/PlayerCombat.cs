@@ -53,8 +53,9 @@ namespace Nocturne.Player
             var range = cfg != null ? cfg.attackRange : 1.2f;
             var arc = cfg != null ? cfg.attackArc : 90f;
             var damage = cfg != null ? cfg.attackDamage : 25;
+            var centerOffset = cfg != null ? cfg.attackCenterOffset : Vector2.zero;
 
-            var origin = (Vector2)transform.position;
+            var origin = AttackOrigin((Vector2)transform.position, dir, centerOffset);
             var hits = Physics2D.OverlapCircleAll(origin, range, 1 << Layers.Enemy);
             var halfArcCos = Mathf.Cos(arc * 0.5f * Mathf.Deg2Rad);
             var landed = false;
@@ -79,6 +80,63 @@ namespace Nocturne.Player
 
             visual.PlayAttack();
             AudioManager.Swing();
+        }
+
+        /// <summary>
+        /// Swing center from a facing-space offset (X = right of facing, Y = forward).
+        /// Shared by the hit test and the gizmo so they can never disagree.
+        /// </summary>
+        private static Vector2 AttackOrigin(Vector2 playerPos, Vector2 dir, Vector2 offset)
+        {
+            var right = new Vector2(dir.y, -dir.x);
+            return playerPos + dir * offset.y + right * offset.x;
+        }
+
+        /// <summary>
+        /// Scene-view preview of the swing sector (range + arc along the current
+        /// facing). Uses the live config at runtime, the scene GameManager's
+        /// config in edit mode. Editor-only, stripped from builds.
+        /// </summary>
+        private void OnDrawGizmos()
+        {
+            var ctrl = controller != null ? controller : GetComponent<PlayerController>();
+            var dir = Vector2.down;
+            if (ctrl != null && ctrl.LastDirection.sqrMagnitude > 0.0001f)
+                dir = ctrl.LastDirection.normalized;
+
+            var gm = GameManager.Instance;
+            if (gm == null)
+                gm = FindFirstObjectByType<GameManager>();
+            var cfg = gm != null ? gm.config : null;
+            var range = cfg != null ? cfg.attackRange : 1.5f;
+            var arc = cfg != null ? cfg.attackArc : 90f;
+            var centerOffset = cfg != null ? cfg.attackCenterOffset : Vector2.zero;
+
+            var origin = AttackOrigin((Vector2)transform.position, dir, centerOffset);
+            var baseAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            var safeArc = Mathf.Clamp(arc, 1f, 360f);
+            var half = safeArc * 0.5f;
+
+            Vector2 Edge(float angleDeg)
+            {
+                var r = angleDeg * Mathf.Deg2Rad;
+                return new Vector2(Mathf.Cos(r), Mathf.Sin(r));
+            }
+
+            Gizmos.color = new Color(1f, 0.35f, 0.25f, 1f);
+            const int segments = 24;
+            var prev = origin + Edge(baseAngle - half) * range;
+            Gizmos.DrawLine(origin, prev);
+            for (var i = 1; i <= segments; i++)
+            {
+                var p = origin + Edge(baseAngle - half + safeArc * i / segments) * range;
+                Gizmos.DrawLine(prev, p);
+                prev = p;
+            }
+            Gizmos.DrawLine(origin, prev);
+
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(origin, origin + dir * range);
         }
     }
 }

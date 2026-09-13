@@ -18,6 +18,7 @@ MonoBehaviour:
   attackCooldown: 0.35
   attackArc: 90
   attackRange: 1.5
+  attackCenterOffset: {x: 0, y: 0}
   hitShakeAmplitude: 0.15
   hitShakeDuration: 0.2
   knockbackDistance: 1

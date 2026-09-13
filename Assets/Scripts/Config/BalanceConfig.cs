@@ -21,6 +21,8 @@ namespace Nocturne.Config
         public float attackCooldown = 0.35f;
         public float attackArc = 90f;
         public float attackRange = 1.2f;
+        [Tooltip("Swing sector center in facing space: X = sideways (right of facing), Y = forward.")]
+        public Vector2 attackCenterOffset = Vector2.zero;
 
         [Header("Hit impact")]
         [Tooltip("Camera shake offset in world units on a landing swing.")]

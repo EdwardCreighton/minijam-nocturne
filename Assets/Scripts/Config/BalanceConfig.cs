@@ -58,6 +58,14 @@ namespace Nocturne.Config
         public float enemyAttackRadius = 1f;
         public float enemyAttackCooldown = 1f;
 
+        [Header("SFX")]
+        [Tooltip("Player swing sound. If empty, falls back to the [Audio] stub.")]
+        public AudioClip playerAttackSound;
+        [Tooltip("Enemy contact-hit sound. If empty, falls back to the [Audio] stub.")]
+        public AudioClip enemyAttackSound;
+        [Tooltip("Volume for combat one-shots.")]
+        [Range(0f, 1f)] public float combatVolume = 1f;
+
         private void OnValidate()
         {
             moveSpeed = Mathf.Max(0.1f, moveSpeed);
@@ -85,6 +93,7 @@ namespace Nocturne.Config
             enemyAggroRadius = Mathf.Max(0.5f, enemyAggroRadius);
             enemyAttackRadius = Mathf.Max(0.2f, enemyAttackRadius);
             enemyAttackCooldown = Mathf.Max(0.1f, enemyAttackCooldown);
+            combatVolume = Mathf.Clamp01(combatVolume);
         }
 
         [Serializable]

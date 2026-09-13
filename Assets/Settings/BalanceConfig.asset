@@ -39,3 +39,6 @@ MonoBehaviour:
   enemyAggroRadius: 6
   enemyAttackRadius: 1
   enemyAttackCooldown: 1
+  playerAttackSound: {fileID: 8300000, guid: 8578d68afc9e9ba448f8d7799d7f7af6, type: 3}
+  enemyAttackSound: {fileID: 8300000, guid: bef1ba9fe32409243b56218b67b99e4d, type: 3}
+  combatVolume: 1

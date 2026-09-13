@@ -109,7 +109,8 @@ namespace Nocturne.Core
             }
         }
 
-        public void PlaySwing() => PlayStub("swing");
+        public void PlaySwing() => PlayCombatConfigured("swing", isPlayer: true);
+        public void PlayEnemyAttack() => PlayCombatConfigured("enemy_attack", isPlayer: false);
         public void PlayHit() => PlayStub("hit");
         public void PlayGateOpen() => PlayStub("gate_open");
         public void PlayDeath() => PlayStub("death");
@@ -138,6 +139,12 @@ namespace Nocturne.Core
         {
             if (Instance != null)
                 Instance.PlaySwing();
+        }
+
+        public static void EnemyAttack()
+        {
+            if (Instance != null)
+                Instance.PlayEnemyAttack();
         }
 
         public static void Hit()
@@ -210,6 +217,26 @@ namespace Nocturne.Core
                 if (Instance != null)
                     Instance.transitionPending = false;
             }
+        }
+
+        /// <summary>
+        /// Combat one-shot from the main config (BalanceConfig SFX section).
+        /// Clips are assigned on the config asset; without a clip (or source)
+        /// it falls back to the [Audio] stub so call sites never branch.
+        /// </summary>
+        private void PlayCombatConfigured(string stubId, bool isPlayer)
+        {
+            var cfg = GameManager.Instance != null ? GameManager.Instance.config : null;
+            var clip = cfg != null
+                ? (isPlayer ? cfg.playerAttackSound : cfg.enemyAttackSound)
+                : null;
+            var volume = cfg != null ? cfg.combatVolume : 1f;
+            if (clip != null && source != null)
+            {
+                source.PlayOneShot(clip, volume);
+                return;
+            }
+            PlayStub(stubId);
         }
 
         private void PlayStub(string id)

@@ -16,6 +16,8 @@ namespace Nocturne.Player
 
         public event System.Action Died;
         public event System.Action HPChanged;
+        /// <summary>Fired whenever damage is actually applied (also on lethal hits).</summary>
+        public event System.Action Damaged;
 
         private float lastDamageTime = float.NegativeInfinity;
 
@@ -39,6 +41,7 @@ namespace Nocturne.Player
 
             CurrentHP = Mathf.Max(0, CurrentHP - amount);
             HPChanged?.Invoke();
+            Damaged?.Invoke();
 
             if (CurrentHP <= 0)
             {

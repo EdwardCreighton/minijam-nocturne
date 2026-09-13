@@ -22,6 +22,9 @@ namespace Nocturne.UI
         // including GameManager's, which creates the RunState — run first.
         private void Start()
         {
+            // Damage flash needs no scene setup: it builds its own overlay.
+            if (GetComponent<DamageFlash>() == null)
+                gameObject.AddComponent<DamageFlash>();
             Refresh();
             if (GameManager.Instance != null)
                 GameManager.Instance.Run.Changed += Refresh;

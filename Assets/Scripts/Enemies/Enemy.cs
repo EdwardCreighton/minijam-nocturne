@@ -31,6 +31,10 @@ namespace Nocturne.Enemies
         {
             rb = GetComponent<Rigidbody2D>();
             mover = GetComponent<EnemyMover>();
+            // Code-driven visuals need no prefab setup: ensure the shared
+            // MainCharacter animation set is actually driven on this enemy.
+            if (GetComponent<EnemyVisual>() == null)
+                gameObject.AddComponent<EnemyVisual>();
         }
 
         /// <summary>Called once by the spawner right after instantiation.</summary>

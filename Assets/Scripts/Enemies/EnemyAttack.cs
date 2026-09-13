@@ -43,6 +43,8 @@ namespace Nocturne.Enemies
             var cooldown = cfg != null ? cfg.enemyAttackCooldown : 1f;
             nextHitTime = Time.time + cooldown;
             playerHealth.TakeDamage(body.Damage, transform.position);
+            var visual = GetComponent<EnemyVisual>();
+            if (visual != null) visual.PlayAttack();
         }
     }
 }

@@ -60,18 +60,26 @@ namespace Nocturne.Enemies
             MovementUtil.TryMove(rb, ChaseDelta(gm) + ConsumeKnockback());
         }
 
-        /// <summary>Chase step for this frame (zero outside aggro range).</summary>
+        /// <summary>
+        /// Chase step for this frame (zero outside aggro range).
+        /// Holds a standoff at attack radius instead of entering the player's
+        /// exact point; separation drift still applies up close so enemies
+        /// spread around the player rather than stacking.
+        /// </summary>
         private Vector2 ChaseDelta(GameManager gm)
         {
             var cfg = gm.config;
             var speed = cfg != null ? cfg.enemySpeed : 2.5f;
             var aggro = cfg != null ? cfg.enemyAggroRadius : 6f;
+            var standoff = cfg != null ? cfg.enemyAttackRadius : 1f;
 
             var toPlayer = (Vector2)player.position - rb.position;
-            if (toPlayer.sqrMagnitude > aggro * aggro || toPlayer.sqrMagnitude < 0.0001f)
+            var dist = toPlayer.magnitude;
+            if (dist > aggro || dist < 0.0001f)
                 return Vector2.zero;
 
-            var dir = toPlayer.normalized + Separation() * 0.7f;
+            var chase = dist > standoff ? toPlayer / dist : Vector2.zero;
+            var dir = chase + Separation() * 0.7f;
             if (dir.sqrMagnitude < 0.0001f) return Vector2.zero;
 
             var speedMult = 1f;

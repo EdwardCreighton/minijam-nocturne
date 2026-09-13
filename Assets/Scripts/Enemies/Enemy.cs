@@ -24,6 +24,15 @@ namespace Nocturne.Enemies
 
         public event System.Action<Enemy> Died;
 
+        private Rigidbody2D rb;
+        private EnemyMover mover;
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody2D>();
+            mover = GetComponent<EnemyMover>();
+        }
+
         /// <summary>Called once by the spawner right after instantiation.</summary>
         public void Initialize(float hpMult, float dmgMult)
         {
@@ -37,7 +46,39 @@ namespace Nocturne.Enemies
             if (!IsAlive || amount <= 0) return;
             CurrentHP = Mathf.Max(0, CurrentHP - amount);
             if (CurrentHP <= 0)
+            {
                 Die();
+                return;
+            }
+            ApplyKnockback(sourcePosition);
+        }
+
+        /// <summary>
+        /// Smooth push away from the attacker (hit impact), consumed ease-out
+        /// by EnemyMover over several FixedUpdates. Dead enemies are skipped
+        /// (they are destroyed anyway).
+        /// </summary>
+        private void ApplyKnockback(Vector2 sourcePosition)
+        {
+            var gm = GameManager.Instance;
+            var cfg = gm != null ? gm.config : null;
+            var distance = cfg != null ? cfg.knockbackDistance : 0.5f;
+            if (distance <= 0f) return;
+            var away = (Vector2)transform.position - sourcePosition;
+            if (away.sqrMagnitude < 0.0001f)
+                away = Random.insideUnitCircle;
+            if (away.sqrMagnitude < 0.0001f) return;
+            var push = away.normalized * distance;
+            if (mover == null) mover = GetComponent<EnemyMover>();
+            if (mover != null)
+            {
+                mover.AddKnockback(push, distance * 2f);
+                return;
+            }
+            // Misconfigured enemy (no mover): instant swept shove so the hit
+            // still has impact instead of silently doing nothing.
+            if (rb == null) rb = GetComponent<Rigidbody2D>();
+            if (rb != null) MovementUtil.TryKnockback(rb, push);
         }
 
         private void Die()

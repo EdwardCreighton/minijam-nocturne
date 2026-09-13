@@ -57,12 +57,24 @@ namespace Nocturne.Player
             var origin = (Vector2)transform.position;
             var hits = Physics2D.OverlapCircleAll(origin, range, 1 << Layers.Enemy);
             var halfArcCos = Mathf.Cos(arc * 0.5f * Mathf.Deg2Rad);
+            var landed = false;
             foreach (var hit in hits)
             {
                 var toTarget = ((Vector2)hit.transform.position - origin).normalized;
                 if (Vector2.Dot(dir, toTarget) < halfArcCos) continue;
                 var damageable = hit.GetComponent<IDamageable>();
-                damageable?.TakeDamage(damage, origin);
+                if (damageable == null) continue;
+                damageable.TakeDamage(damage, origin);
+                landed = true;
+            }
+
+            if (landed)
+            {
+                var cam = FindFirstObjectByType<FollowCam>();
+                if (cam != null)
+                    cam.Shake(
+                        cfg != null ? cfg.hitShakeAmplitude : 0.15f,
+                        cfg != null ? cfg.hitShakeDuration : 0.2f);
             }
 
             visual.PlayAttack();

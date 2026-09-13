@@ -22,6 +22,14 @@ namespace Nocturne.Config
         public float attackArc = 90f;
         public float attackRange = 1.2f;
 
+        [Header("Hit impact")]
+        [Tooltip("Camera shake offset in world units on a landing swing.")]
+        public float hitShakeAmplitude = 0.15f;
+        [Tooltip("Camera shake duration in seconds on a landing swing.")]
+        public float hitShakeDuration = 0.2f;
+        [Tooltip("How far a surviving enemy is pushed away from the player per hit.")]
+        public float knockbackDistance = 0.5f;
+
         [Header("Survivability")]
         [Tooltip("Invulnerability window after taking any damage.")]
         public float damageCooldown = 0.5f;
@@ -56,6 +64,9 @@ namespace Nocturne.Config
             attackCooldown = Mathf.Max(0.05f, attackCooldown);
             attackArc = Mathf.Clamp(attackArc, 1f, 360f);
             attackRange = Mathf.Max(0.1f, attackRange);
+            hitShakeAmplitude = Mathf.Max(0f, hitShakeAmplitude);
+            hitShakeDuration = Mathf.Max(0f, hitShakeDuration);
+            knockbackDistance = Mathf.Max(0f, knockbackDistance);
             damageCooldown = Mathf.Max(0f, damageCooldown);
             holdTime = Mathf.Max(0.05f, holdTime);
             interactRadius = Mathf.Max(0.1f, interactRadius);

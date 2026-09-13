@@ -18,6 +18,9 @@ MonoBehaviour:
   attackCooldown: 0.35
   attackArc: 90
   attackRange: 1.5
+  hitShakeAmplitude: 0.15
+  hitShakeDuration: 0.2
+  knockbackDistance: 1
   damageCooldown: 0.5
   holdTime: 0.6
   interactRadius: 1.5

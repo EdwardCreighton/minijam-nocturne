@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" font-family="Arial,sans-serif">
+  <defs>
+    <pattern id="checker" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#111"/>
+      <rect width="6" height="6" fill="#fff"/>
+      <rect x="6" y="6" width="6" height="6" fill="#fff"/>
+    </pattern>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#fff" opacity="0.85"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="700" fill="#0b0b18"/>
+
+  <text x="500" y="22" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">NOCTURNE — layout v2 · старт-клетка</text>
+  <text x="500" y="40" text-anchor="middle" fill="#8f8fb0" font-size="12">старт: 1 выход · 10 · дальше: 3 финиша · бесшовно</text>
+
+  <!-- ZONES -->
+  <rect x="280" y="80" width="440" height="140" rx="18" fill="#1d2b53" stroke="#5b6ee1" stroke-width="2" stroke-dasharray="10 6"/>
+  <text x="500" y="105" text-anchor="middle" fill="#9fb3ff" font-size="14">ХАБ</text>
+  <rect x="460" y="30" width="80" height="55" rx="10" fill="#123524" stroke="#7dffb2" stroke-width="2"/>
+  <!-- center A (hub, no spawn) -->
+  <rect x="400" y="300" width="200" height="120" rx="14" fill="#2a1e3f" stroke="#c586ff" stroke-width="2"/>
+  <text x="500" y="322" text-anchor="middle" fill="#d9b8ff" font-size="14">A · хаб</text>
+  <!-- START cell: small, 1 exit -->
+  <rect x="450" y="445" width="100" height="50" rx="10" fill="#1f3d2b" stroke="#39ff6a" stroke-width="2.5"/>
+  <text x="500" y="462" text-anchor="middle" fill="#9dffb9" font-size="13" font-weight="bold">СТАРТ</text>
+  <!-- south farm pocket -->
+  <rect x="420" y="500" width="160" height="120" rx="14" fill="#3a2b12" stroke="#ffcf5b" stroke-width="2" stroke-dasharray="10 6"/>
+  <text x="500" y="522" text-anchor="middle" fill="#ffdf8a" font-size="13">ФАРМ · тупик</text>
+  <!-- east B -->
+  <rect x="700" y="280" width="180" height="140" rx="14" fill="#12303a" stroke="#5bd7ff" stroke-width="2"/>
+  <text x="790" y="302" text-anchor="middle" fill="#9beaff" font-size="14">B · восток</text>
+  <!-- west C -->
+  <rect x="120" y="280" width="180" height="140" rx="14" fill="#3a1220" stroke="#ff5b8a" stroke-width="2"/>
+  <text x="210" y="302" text-anchor="middle" fill="#ffa4bd" font-size="14">C · запад</text>
+  <!-- finish pockets -->
+  <rect x="880" y="310" width="80" height="80" rx="10" fill="#123524" stroke="#7dffb2" stroke-width="2"/>
+  <rect x="40" y="310" width="80" height="80" rx="10" fill="#123524" stroke="#7dffb2" stroke-width="2"/>
+
+  <!-- corridors -->
+  <rect x="480" y="220" width="40" height="80" fill="#1d2b53" stroke="#5b6ee1" stroke-width="1.5"/>
+  <!-- start->A: the ONLY exit -->
+  <rect x="485" y="420" width="30" height="25" fill="#1f3d2b" stroke="#39ff6a" stroke-width="1.5"/>
+  <!-- A->farm: offset east so start cell keeps 1 exit -->
+  <rect x="555" y="420" width="25" height="80" fill="#3a2b12" stroke="#ffcf5b" stroke-width="1.5"/>
+  <rect x="600" y="340" width="100" height="40" fill="#12303a" stroke="#5bd7ff" stroke-width="1.5"/>
+  <rect x="880" y="335" width="28" height="30" fill="#123524" stroke="#7dffb2" stroke-width="1.5"/>
+  <rect x="300" y="340" width="100" height="40" fill="#3a1220" stroke="#ff5b8a" stroke-width="1.5"/>
+  <rect x="92" y="335" width="28" height="30" fill="#123524" stroke="#7dffb2" stroke-width="1.5"/>
+  <rect x="700" y="220" width="40" height="60" fill="#1d2b53" stroke="#5b6ee1" stroke-width="1.5"/>
+  <rect x="260" y="220" width="40" height="60" fill="#1d2b53" stroke="#5b6ee1" stroke-width="1.5"/>
+
+  <!-- ROUTES -->
+  <path d="M500,462 L500,420 L500,360 L650,360 L790,360 L915,350" fill="none" stroke="#5bd7ff" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arr)" opacity="0.9"/>
+  <path d="M500,462 L500,420 L480,360 L350,360 L210,360 L85,350" fill="none" stroke="#ff5b8a" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arr)" opacity="0.9"/>
+  <path d="M500,420 L500,340 L500,260 L500,120 L500,60" fill="none" stroke="#9fb3ff" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arr)" opacity="0.9"/>
+  <path d="M600,150 L700,150 L720,250 L760,330" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="4 6" opacity="0.55" marker-end="url(#arr)"/>
+  <path d="M400,150 L300,150 L280,250 L240,330" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="4 6" opacity="0.55" marker-end="url(#arr)"/>
+
+  <!-- GATES -->
+  <g font-size="13" font-weight="bold" text-anchor="middle">
+    <!-- start 10: single exit -->
+    <rect x="480" y="428" width="40" height="9" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="500" cy="408" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="500" y="413" fill="#fff">10</text>
+    <!-- south 20 (offset) -->
+    <rect x="551" y="452" width="33" height="10" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="606" cy="457" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="606" y="462" fill="#fff">20</text>
+    <!-- east 30 -->
+    <rect x="645" y="332" width="10" height="56" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="650" cy="398" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="650" y="403" fill="#fff">30</text>
+    <!-- west 50 -->
+    <rect x="345" y="332" width="10" height="56" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="350" cy="398" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="350" y="403" fill="#fff">50</text>
+    <!-- north 60 -->
+    <rect x="472" y="252" width="56" height="10" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="540" cy="257" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="540" y="262" fill="#fff">60</text>
+    <!-- east2 70 -->
+    <rect x="880" y="327" width="10" height="46" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="884" cy="385" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="884" y="390" fill="#fff">70</text>
+    <!-- west2 70 -->
+    <rect x="110" y="327" width="10" height="46" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="116" cy="385" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="116" y="390" fill="#fff">70</text>
+  </g>
+
+  <!-- START -->
+  <circle cx="500" cy="478" r="12" fill="#39ff6a" stroke="#fff" stroke-width="2.5"/>
+  <text x="500" y="483" text-anchor="middle" font-size="12" font-weight="bold" fill="#06230f">S</text>
+
+  <!-- FINISHES -->
+  <g text-anchor="middle" font-weight="bold">
+    <rect x="478" y="38" width="44" height="22" fill="url(#checker)" stroke="#fff" stroke-width="1.5"/>
+    <text x="500" y="76" font-size="12" fill="#7dffb2">F-N · 70</text>
+    <rect x="894" y="318" width="44" height="22" fill="url(#checker)" stroke="#fff" stroke-width="1.5"/>
+    <text x="920" y="410" font-size="12" fill="#7dffb2">F-E · 110</text>
+    <rect x="54" y="318" width="44" height="22" fill="url(#checker)" stroke="#fff" stroke-width="1.5"/>
+    <text x="80" y="410" font-size="12" fill="#7dffb2">F-W · 130</text>
+  </g>
+
+  <!-- ENEMIES -->
+  <g stroke="#000" stroke-width="1">
+    <!-- start cell: 1 chaser = 10 = 1 kill to exit -->
+    <circle cx="528" cy="478" r="7" fill="#ff3b3b"/>
+    <!-- center -->
+    <circle cx="450" cy="385" r="7" fill="#ff3b3b"/><circle cx="550" cy="385" r="7" fill="#ff3b3b"/>
+    <!-- south farm x3 -->
+    <circle cx="460" cy="560" r="7" fill="#ff3b3b"/><circle cx="500" cy="580" r="7" fill="#ff3b3b"/><circle cx="540" cy="560" r="7" fill="#ff3b3b"/>
+    <!-- east / west / hub -->
+    <circle cx="750" cy="360" r="7" fill="#ff3b3b"/><circle cx="820" cy="380" r="7" fill="#ff8a00"/>
+    <circle cx="180" cy="360" r="7" fill="#ff3b3b"/><circle cx="250" cy="380" r="7" fill="#ff8a00"/>
+    <circle cx="400" cy="160" r="7" fill="#ff8a00"/><circle cx="500" cy="180" r="7" fill="#ff8a00"/><circle cx="600" cy="160" r="7" fill="#ff8a00"/>
+  </g>
+  <text x="500" y="600" text-anchor="middle" font-size="11" fill="#ff9a9a">● Chaser</text>
+  <text x="500" y="614" text-anchor="middle" font-size="11" fill="#ffb066">● Dasher (lvl 2+)</text>
+
+  <!-- route totals -->
+  <g font-size="12" font-weight="bold">
+    <rect x="596" y="416" width="170" height="20" rx="10" fill="#0b0b18" stroke="#5bd7ff"/>
+    <text x="681" y="430" text-anchor="middle" fill="#9beaff">10+30+70 = 110</text>
+    <rect x="234" y="416" width="170" height="20" rx="10" fill="#0b0b18" stroke="#ff5b8a"/>
+    <text x="319" y="430" text-anchor="middle" fill="#ffa4bd">10+50+70 = 130</text>
+    <rect x="556" y="130" width="120" height="20" rx="10" fill="#0b0b18" stroke="#9fb3ff"/>
+    <text x="616" y="144" text-anchor="middle" fill="#c6d2ff">10+60 → F-N</text>
+  </g>
+
+  <!-- difficulty ladder -->
+  <g font-size="11">
+    <text x="30" y="660" fill="#8f8fb0">Spent → lvl (N=100):</text>
+    <rect x="170" y="646" width="120" height="16" fill="#1c3faa"/><text x="230" y="658" text-anchor="middle" fill="#fff">0–99 · L1</text>
+    <rect x="295" y="646" width="120" height="16" fill="#2a6b2a"/><text x="355" y="658" text-anchor="middle" fill="#fff">100–199 · L2</text>
+    <rect x="420" y="646" width="120" height="16" fill="#7a5b00"/><text x="480" y="658" text-anchor="middle" fill="#fff">200–299 · L3</text>
+    <rect x="545" y="646" width="120" height="16" fill="#7a1e1e"/><text x="605" y="658" text-anchor="middle" fill="#fff">300+ · L4</text>
+    <text x="680" y="658" fill="#8f8fb0">max 310 = всё открыто</text>
+  </g>
+
+  <!-- legend -->
+  <g font-size="11" fill="#c9c9e0">
+    <rect x="30" y="50" width="150" height="86" rx="8" fill="none" stroke="#555" stroke-dasharray="4 4"/>
+    <circle cx="45" cy="68" r="6" fill="#39ff6a" stroke="#fff"/><text x="58" y="72">старт</text>
+    <rect x="39" y="80" width="12" height="7" fill="url(#checker)" stroke="#fff"/><text x="58" y="87">финиш</text>
+    <rect x="38" y="95" width="14" height="5" fill="#ff3b3b" stroke="#fff"/><text x="58" y="101">гейт + цена</text>
+    <circle cx="45" cy="115" r="5" fill="#ff3b3b" stroke="#000"/><text x="58" y="118">враг (точка спавна)</text>
+  </g>
+</svg>

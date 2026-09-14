@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" font-family="Arial,sans-serif">
+  <defs>
+    <pattern id="checker" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#111"/>
+      <rect width="6" height="6" fill="#fff"/>
+      <rect x="6" y="6" width="6" height="6" fill="#fff"/>
+    </pattern>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#fff" opacity="0.85"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="700" fill="#0b0b18"/>
+
+  <text x="500" y="22" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">NOCTURNE — layout v3 · асимметрия</text>
+  <text x="500" y="40" text-anchor="middle" fill="#8f8fb0" font-size="12">старт: 1 выход · 10 · 3 финиша · без зеркальных веток</text>
+
+  <!-- ZONES: irregular, all different size/orientation, no symmetry axis -->
+  <!-- D heights (NW, tilted) -->
+  <polygon points="250,140 470,110 530,200 490,300 300,330 210,240" fill="#1d2b53" stroke="#5b6ee1" stroke-width="2" stroke-dasharray="10 6"/>
+  <text x="370" y="165" text-anchor="middle" fill="#9fb3ff" font-size="14">D · высоты</text>
+  <!-- C crossing (NE-mid, vertical) -->
+  <polygon points="680,230 860,210 900,330 820,430 690,410 660,300" fill="#12303a" stroke="#5bd7ff" stroke-width="2"/>
+  <text x="780" y="255" text-anchor="middle" fill="#9beaff" font-size="14">C · развилка</text>
+  <!-- B lowlands (E-south, long) -->
+  <polygon points="530,460 750,440 820,500 780,590 580,600 510,530" fill="#3a1220" stroke="#ff5b8a" stroke-width="2"/>
+  <text x="660" y="483" text-anchor="middle" fill="#ffa4bd" font-size="14">B · низины</text>
+  <!-- A starter (SW-center, L-ish) -->
+  <polygon points="280,420 470,400 510,480 450,590 290,580 250,490" fill="#2a1e3f" stroke="#c586ff" stroke-width="2"/>
+  <text x="380" y="445" text-anchor="middle" fill="#d9b8ff" font-size="14">A</text>
+  <!-- START cell: tiny, 1 exit -->
+  <rect x="90" y="500" width="110" height="55" rx="10" fill="#1f3d2b" stroke="#39ff6a" stroke-width="2.5"/>
+  <text x="145" y="522" text-anchor="middle" fill="#9dffb9" font-size="13" font-weight="bold">СТАРТ</text>
+  <!-- farm pocket (S, dead end) -->
+  <polygon points="300,620 450,615 460,665 310,670" fill="#3a2b12" stroke="#ffcf5b" stroke-width="2" stroke-dasharray="10 6"/>
+  <text x="380" y="640" text-anchor="middle" fill="#ffdf8a" font-size="12">ФАРМ</text>
+  <!-- finish pockets: scattered, different sizes -->
+  <rect x="90" y="100" width="80" height="70" rx="10" fill="#123524" stroke="#7dffb2" stroke-width="2"/>
+  <rect x="840" y="90" width="90" height="65" rx="10" fill="#123524" stroke="#7dffb2" stroke-width="2"/>
+  <rect x="840" y="520" width="90" height="80" rx="10" fill="#123524" stroke="#7dffb2" stroke-width="2"/>
+
+  <!-- CORRIDORS (floor) -->
+  <!-- START->A: ONLY exit -->
+  <rect x="200" y="518" width="55" height="20" fill="#1f3d2b" stroke="#39ff6a" stroke-width="1.5"/>
+  <!-- A->farm -->
+  <rect x="360" y="590" width="25" height="28" fill="#3a2b12" stroke="#ffcf5b" stroke-width="1.5"/>
+  <!-- A->B -->
+  <rect x="505" y="492" width="30" height="24" fill="#3a1220" stroke="#ff5b8a" stroke-width="1.5"/>
+  <!-- A->D winding -->
+  <path d="M430,400 L420,340 L340,300 L300,262" fill="none" stroke="#1d2b53" stroke-width="24"/>
+  <path d="M430,400 L420,340 L340,300 L300,262" fill="none" stroke="#5b6ee1" stroke-width="24" opacity="0.25"/>
+  <!-- B->C diagonal -->
+  <path d="M762,442 L788,418 L782,382" fill="none" stroke="#12303a" stroke-width="22"/>
+  <path d="M762,442 L788,418 L782,382" fill="none" stroke="#5bd7ff" stroke-width="22" opacity="0.25"/>
+  <!-- C->F-SE -->
+  <path d="M825,430 L852,480 L856,520" fill="none" stroke="#123524" stroke-width="20"/>
+  <!-- D->F-NW -->
+  <path d="M212,202 L152,172 L130,150" fill="none" stroke="#1d2b53" stroke-width="20"/>
+  <!-- C->F-NE -->
+  <rect x="862" y="155" width="22" height="58" fill="#123524" stroke="#7dffb2" stroke-width="1.5"/>
+  <!-- D<->C open bypass (NO gate) -->
+  <path d="M530,222 L600,242 L660,282" fill="none" stroke="#555" stroke-width="16" stroke-dasharray="2 8"/>
+  <path d="M530,222 L600,242 L660,282" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 5" opacity="0.7"/>
+
+  <!-- ROUTES -->
+  <path d="M145,510 L255,528 L380,500 L430,400 L420,340 L340,300 L250,220 L130,140" fill="none" stroke="#9fb3ff" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arr)" opacity="0.9"/>
+  <path d="M145,510 L255,528 L380,500 L520,500 L650,500 L760,470 L790,420 L830,380 L855,300 L870,180 L885,120" fill="none" stroke="#5bd7ff" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arr)" opacity="0.9"/>
+  <path d="M145,510 L255,528 L380,500 L520,500 L700,490 L790,520 L870,560" fill="none" stroke="#ff5b8a" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arr)" opacity="0.9"/>
+
+  <!-- GATES -->
+  <g font-size="13" font-weight="bold" text-anchor="middle">
+    <!-- start 10 -->
+    <rect x="222" y="510" width="9" height="36" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="227" cy="492" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="227" y="497" fill="#fff">10</text>
+    <!-- farm 20 -->
+    <rect x="355" y="600" width="35" height="9" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="402" cy="604" r="15" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="402" y="609" fill="#fff" font-size="12">20</text>
+    <!-- A->B 30 -->
+    <rect x="515" y="484" width="9" height="40" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="520" cy="540" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="520" y="545" fill="#fff">30</text>
+    <!-- A->D 45 -->
+    <rect x="392" y="318" width="42" height="9" transform="rotate(28 392 318)" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="462" cy="330" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="462" y="335" fill="#fff">45</text>
+    <!-- B->C 55 -->
+    <rect x="766" y="408" width="34" height="9" transform="rotate(-72 766 408)" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="738" cy="400" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="738" y="405" fill="#fff">55</text>
+    <!-- C->F-NE 60 -->
+    <rect x="856" y="178" width="34" height="9" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="905" cy="182" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="905" y="187" fill="#fff">60</text>
+    <!-- C->F-SE 70 -->
+    <rect x="832" y="468" width="36" height="9" transform="rotate(72 832 468)" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="810" cy="492" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="810" y="497" fill="#fff">70</text>
+    <!-- D->F-NW 80 -->
+    <rect x="168" y="160" width="9" height="36" transform="rotate(24 168 160)" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="208" cy="150" r="16" fill="#ff3b3b" stroke="#fff" stroke-width="1.5"/>
+    <text x="208" y="155" fill="#fff">80</text>
+  </g>
+  <text x="595" y="232" text-anchor="middle" fill="#fff" font-size="11" opacity="0.8">мост · открыто</text>
+
+  <!-- START -->
+  <circle cx="130" cy="538" r="12" fill="#39ff6a" stroke="#fff" stroke-width="2.5"/>
+  <text x="130" y="543" text-anchor="middle" font-size="12" font-weight="bold" fill="#06230f">S</text>
+
+  <!-- FINISHES -->
+  <g text-anchor="middle" font-weight="bold">
+    <rect x="102" y="108" width="44" height="22" fill="url(#checker)" stroke="#fff" stroke-width="1.5"/>
+    <text x="130" y="188" font-size="12" fill="#7dffb2">F-W · 135</text>
+    <rect x="858" y="98" width="44" height="22" fill="url(#checker)" stroke="#fff" stroke-width="1.5"/>
+    <text x="885" y="172" font-size="12" fill="#7dffb2">F-N · 115</text>
+    <rect x="862" y="528" width="44" height="22" fill="url(#checker)" stroke="#fff" stroke-width="1.5"/>
+    <text x="885" y="616" font-size="12" fill="#7dffb2">F-SE · 165</text>
+  </g>
+
+  <!-- ENEMIES: scattered, uneven counts -->
+  <g stroke="#000" stroke-width="1">
+    <circle cx="170" cy="538" r="7" fill="#ff3b3b"/>
+    <circle cx="340" cy="500" r="7" fill="#ff3b3b"/><circle cx="420" cy="540" r="7" fill="#ff3b3b"/>
+    <circle cx="340" cy="648" r="7" fill="#ff3b3b"/><circle cx="385" cy="655" r="7" fill="#ff3b3b"/><circle cx="425" cy="645" r="7" fill="#ff3b3b"/>
+    <circle cx="600" cy="520" r="7" fill="#ff3b3b"/><circle cx="680" cy="550" r="7" fill="#ff3b3b"/><circle cx="740" cy="530" r="7" fill="#ff8a00"/>
+    <circle cx="730" cy="330" r="7" fill="#ff8a00"/><circle cx="800" cy="370" r="7" fill="#ff8a00"/><circle cx="850" cy="300" r="7" fill="#ff3b3b"/>
+    <circle cx="320" cy="220" r="7" fill="#ff8a00"/><circle cx="420" cy="200" r="7" fill="#ff8a00"/><circle cx="380" cy="270" r="7" fill="#ff8a00"/><circle cx="470" cy="250" r="7" fill="#ff3b3b"/>
+  </g>
+  <text x="145" y="580" text-anchor="middle" font-size="11" fill="#ff9a9a">● Chaser</text>
+  <text x="145" y="594" text-anchor="middle" font-size="11" fill="#ffb066">● Dasher (2+)</text>
+
+  <!-- route totals -->
+  <g font-size="12" font-weight="bold">
+    <rect x="36" y="360" width="180" height="20" rx="10" fill="#0b0b18" stroke="#9fb3ff"/>
+    <text x="126" y="374" text-anchor="middle" fill="#c6d2ff">10+45+80 = 135</text>
+    <rect x="540" y="620" width="190" height="20" rx="10" fill="#0b0b18" stroke="#ff5b8a"/>
+    <text x="635" y="634" text-anchor="middle" fill="#ffa4bd">10+30+55+70 = 165</text>
+    <rect x="700" y="130" width="120" height="20" rx="10" fill="#0b0b18" stroke="#5bd7ff"/>
+    <text x="760" y="144" text-anchor="middle" fill="#9beaff">10+45+60</text>
+  </g>
+
+  <!-- difficulty ladder -->
+  <g font-size="11">
+    <text x="30" y="690" fill="#8f8fb0">Spent → lvl (N=100):</text>
+    <rect x="170" y="676" width="110" height="16" fill="#1c3faa"/><text x="225" y="688" text-anchor="middle" fill="#fff">0–99 · L1</text>
+    <rect x="285" y="676" width="110" height="16" fill="#2a6b2a"/><text x="340" y="688" text-anchor="middle" fill="#fff">100–199 · L2</text>
+    <rect x="400" y="676" width="110" height="16" fill="#7a5b00"/><text x="455" y="688" text-anchor="middle" fill="#fff">200–299 · L3</text>
+    <rect x="515" y="676" width="110" height="16" fill="#7a1e1e"/><text x="570" y="688" text-anchor="middle" fill="#fff">300+ · L4</text>
+    <text x="640" y="688" fill="#8f8fb0">max 370 = всё открыто</text>
+  </g>
+
+  <!-- legend -->
+  <g font-size="11" fill="#c9c9e0">
+    <rect x="830" y="360" width="150" height="86" rx="8" fill="none" stroke="#555" stroke-dasharray="4 4"/>
+    <circle cx="845" cy="378" r="6" fill="#39ff6a" stroke="#fff"/><text x="858" y="382">старт</text>
+    <rect x="839" y="390" width="12" height="7" fill="url(#checker)" stroke="#fff"/><text x="858" y="397">финиш</text>
+    <rect x="838" y="405" width="14" height="5" fill="#ff3b3b" stroke="#fff"/><text x="858" y="411">гейт + цена</text>
+    <circle cx="845" cy="425" r="5" fill="#ff3b3b" stroke="#000"/><text x="858" y="428">враг</text>
+  </g>
+</svg>

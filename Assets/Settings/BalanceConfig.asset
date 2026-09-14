@@ -26,7 +26,7 @@ MonoBehaviour:
   holdTime: 0.6
   interactRadius: 1.5
   gateDebounce: 0.5
-  deathDelay: 1
+  deathDelay: 3
   difficultyN: 50
   difficultyK: 0.25
   difficultyM: 0.15

@@ -279,7 +279,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 770002, guid: 03fff673ac9b4d39aa398a71eba88347, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -140
+      value: -252
       objectReference: {fileID: 0}
     - target: {fileID: 770009, guid: 03fff673ac9b4d39aa398a71eba88347, type: 3}
       propertyPath: m_text
@@ -10551,6 +10551,9 @@ MonoBehaviour:
   musicTrack: {fileID: 8300000, guid: 620bdea24659f874d80edf553d9ea85c, type: 3}
   musicVolume: 0.7
   playMusicOnStart: 1
+  playerSwing: {fileID: 0}
+  hit: {fileID: 0}
+  enemySwing: {fileID: 0}
 --- !u!1 &778000001
 GameObject:
   m_ObjectHideFlags: 0
@@ -10748,7 +10751,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 40}
+  m_AnchoredPosition: {x: 0, y: -3}
   m_SizeDelta: {x: 900, y: 68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &909808061
@@ -10779,9 +10782,20 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Team: EdwardCreighton, Slaesh
+  m_text: 'TEAM
 
-    Characters by:  Mattz Art (xzany)'
+    EdwardCreighton, Slaesh
+
+
+    ART
+
+    Characters - Mattz Art
+    (xzany)
+
+
+    AUDIO
+
+    Footsteps - Nox_Sound'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10803,7 +10817,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -10831,13 +10845,13 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
   m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
-  m_isOrthographic: 0
+  m_isOrthographic: 1
   m_isCullingEnabled: 0
   m_horizontalMapping: 0
   m_verticalMapping: 0

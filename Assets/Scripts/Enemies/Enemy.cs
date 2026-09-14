@@ -49,6 +49,7 @@ namespace Nocturne.Enemies
         {
             if (!IsAlive || amount <= 0) return;
             CurrentHP = Mathf.Max(0, CurrentHP - amount);
+            AudioManager.Hit();
             if (CurrentHP <= 0)
             {
                 Die();
@@ -89,7 +90,6 @@ namespace Nocturne.Enemies
         {
             var gm = GameManager.Instance;
             if (gm != null) gm.Run.AddKill(ScoreValue);
-            AudioManager.Hit();
             Died?.Invoke(this);
             Destroy(gameObject);
         }

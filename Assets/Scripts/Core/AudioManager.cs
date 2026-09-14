@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Nocturne.Core
 {
@@ -21,6 +22,10 @@ namespace Nocturne.Core
         [SerializeField, Range(0f, 1f)] private float musicVolume = 0.7f;
         [Tooltip("Запустить musicTrack в loop при старте сцены. Включено только в MainMenu.")]
         [SerializeField] private bool playMusicOnStart;
+
+        [SerializeField] private AudioClip playerSwing;
+        [SerializeField] private AudioClip hit;
+        [SerializeField] private AudioClip enemySwing;
 
         private AudioSource source;
         private AudioSource musicSource;
@@ -109,10 +114,36 @@ namespace Nocturne.Core
             }
         }
 
-        public void PlaySwing() => PlayCombatConfigured("swing", isPlayer: true);
-        public void PlayEnemyAttack() => PlayCombatConfigured("enemy_attack", isPlayer: false);
+        public void PlaySwing()
+        {
+            if (playerSwing != null && source != null)
+            {
+                source.PlayOneShot(playerSwing);
+                return;
+            }
+            PlayStub("swing");
+        }
+
+        public void PlayEnemyAttack()
+        {
+            if (enemySwing != null && source != null)
+            {
+                source.PlayOneShot(enemySwing);
+                return;
+            }
+            PlayStub("enemySwing");
+        }
         public void PlayFootsteps() => PlayFootstepsConfigured();
-        public void PlayHit() => PlayStub("hit");
+
+        public void PlayHit()
+        {
+            if (hit != null && source != null)
+            {
+                source.PlayOneShot(hit);
+                return;
+            }
+            PlayStub("hit");
+        }
         public void PlayGateOpen() => PlayStub("gate_open");
         public void PlayDeath() => PlayStub("death");
         public void PlayWin() => PlayStub("win");
@@ -231,7 +262,7 @@ namespace Nocturne.Core
         /// Clips are assigned on the config asset; without a clip (or source)
         /// it falls back to the [Audio] stub so call sites never branch.
         /// </summary>
-        private void PlayCombatConfigured(string stubId, bool isPlayer)
+        /*private void PlayCombatConfigured(string stubId, bool isPlayer)
         {
             var cfg = GameManager.Instance != null ? GameManager.Instance.config : null;
             var clip = cfg != null
@@ -244,7 +275,7 @@ namespace Nocturne.Core
                 return;
             }
             PlayStub(stubId);
-        }
+        }*/
 
         /// <summary>
         /// Footstep one-shot from the main config, played at footstepsPitch.

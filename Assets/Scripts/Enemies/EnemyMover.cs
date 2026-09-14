@@ -13,6 +13,8 @@ namespace Nocturne.Enemies
     [RequireComponent(typeof(Rigidbody2D))]
     public sealed class EnemyMover : MonoBehaviour
     {
+        public bool isDummy;
+        
         [Header("Dash (1 = off)")]
         public float dashSpeedMult = 1f;
         public float dashInterval = 3f;
@@ -68,6 +70,8 @@ namespace Nocturne.Enemies
         /// </summary>
         private Vector2 ChaseDelta(GameManager gm)
         {
+            if (isDummy) return Vector2.zero;
+            
             var cfg = gm.config;
             var speed = cfg != null ? cfg.enemySpeed : 2.5f;
             var aggro = cfg != null ? cfg.enemyAggroRadius : 6f;

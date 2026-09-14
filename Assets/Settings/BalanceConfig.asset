@@ -31,7 +31,13 @@ MonoBehaviour:
   difficultyK: 0.25
   difficultyM: 0.15
   maxLevel: 5
-  tierTable: []
+  tierTable:
+  - level: 1
+    enemyPrefabs:
+    - {fileID: 4899669906953774209, guid: 86f9325332ab1574181f8735d98aae0f, type: 3}
+  - level: 2
+    enemyPrefabs:
+    - {fileID: 4231129638871520136, guid: a01e4a9c145c787489d3234048b2f900, type: 3}
   chaserHP: 50
   chaserDamage: 10
   chaserScore: 10

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Nocturne.Core;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Nocturne.Enemies
 {
@@ -26,6 +27,8 @@ namespace Nocturne.Enemies
         public List<SpawnEntry> entries = new();
         [Min(0f)] public float respawnDelay;
         [Min(1)] public int maxAlive = 20;
+
+        public SpawnEntry dummy;
 
         private readonly List<Enemy> alive = new();
         private readonly Dictionary<Enemy, SpawnEntry> origin = new();
@@ -74,8 +77,36 @@ namespace Nocturne.Enemies
 
         private void SpawnAll()
         {
+            SpawnDummy();
+            
             foreach (var entry in entries)
                 SpawnOne(entry);
+        }
+
+        private void SpawnDummy()
+        {
+            var gm = GameManager.Instance;
+            var cfg = gm != null ? gm.config : null;
+            var spent = gm != null ? gm.Run.SpentTotal : 0;
+            var level = DifficultyScaler.GetLevel(spent, cfg);
+            var prefab = dummy.prefab;
+
+            var go = Instantiate(prefab, dummy.position, Quaternion.identity);
+            var enemy = go.GetComponent<Enemy>();
+            if (enemy == null)
+            {
+                Debug.LogError($"EnemySpawner: prefab {prefab.name} has no Enemy.", this);
+                Destroy(go);
+                return;
+            }
+
+            enemy.Initialize(
+                DifficultyScaler.GetHpMult(level, cfg),
+                DifficultyScaler.GetDmgMult(level, cfg));
+
+            alive.Add(enemy);
+            origin[enemy] = dummy;
+            enemy.Died += OnEnemyDied;
         }
 
         private void SpawnOne(SpawnEntry entry)
@@ -88,9 +119,10 @@ namespace Nocturne.Enemies
             var cfg = gm != null ? gm.config : null;
             var spent = gm != null ? gm.Run.SpentTotal : 0;
             var level = DifficultyScaler.GetLevel(spent, cfg);
-            var prefab = entry.tierPrefab != null && level >= Mathf.Max(1, entry.tierMinLevel)
+            var prefab = cfg.tierTable[level - 1].enemyPrefabs[0];
+            /*var prefab = entry.tierPrefab != null && level >= Mathf.Max(1, entry.tierMinLevel)
                 ? entry.tierPrefab
-                : entry.prefab;
+                : entry.prefab;*/
 
             var go = Instantiate(prefab, entry.position, Quaternion.identity);
             var enemy = go.GetComponent<Enemy>();
@@ -123,6 +155,11 @@ namespace Nocturne.Enemies
 
         private void OnDrawGizmos()
         {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(dummy.position, 0.4f);
+            Gizmos.DrawLine(dummy.position + Vector3.left * 0.4f, dummy.position + Vector3.right * 0.4f);
+            Gizmos.DrawLine(dummy.position + Vector3.down * 0.4f, dummy.position + Vector3.up * 0.4f);
+            
             if (entries == null) return;
             foreach (var entry in entries)
             {

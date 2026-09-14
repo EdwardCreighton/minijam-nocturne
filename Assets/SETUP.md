@@ -143,8 +143,8 @@
 - `AudioManager` на `GameSystems` + отдельном `Audio` в `MainMenu` (один `AudioSource`, `ignoreListenerPause`, поле `Click Sound` — клип назначается в обеих сценах). Методы `Play*` без клипов пишут `[Audio] id` в консоль. Вызовы вшиты: удар/попадание/гейт/смерть/победа. Кнопки: клик через `AudioManager.Click()`, переходы между сценами через `ClickThenLoad()` (задержка `0.12s` realtime, иначе `LoadScene` обрежет звук); разовые кнопки — компонент `UiClickSound` (не дублировать с явными вызовами). Настоящие клипы: Vorbis, только после первого жеста (WebGL).
 
 ### Тесты (`Assets/Tests/`, Test Runner)
-- EditMode: `RunStateTests`, `DifficultyScalerTests`, `BalanceAndGateTests` (дефолты конфига + уникальность `Gate.id` в сцене).
-- PlayMode: `DeathPersistenceTests`, `HoldToOpenTests` (синтетическая клавиатура через queued state; враги чистятся для детерминизма), `FlowTests` (пауза, финиш; ожидания только unscaled — победа/смерть морозят `timeScale`).
+- EditMode: `RunStateTests`, `DifficultyScalerTests`, `BalanceAndGateTests` (дефолты конфига + уникальность `Gate.id` в сцене), `LevelPlaylistTests` (очередь: покрытие без повторов, детерминизм на seed, пропуск `null`-слотов).
+- PlayMode: `DeathPersistenceTests`, `HoldToOpenTests` (синтетическая клавиатура через queued state; враги чистятся для детерминизма), `FlowTests` (пауза, финиш; ожидания только unscaled — победа/смерть морозят `timeScale`), `LevelMusicPlaylistTests` (старт плейлиста, `effective = global × track`, автопереход, пауза с миром; клипы короткие синтезированные, ожидания только realtime).
 
 ### Сборки (важно)
 - Код разделён на сборки: `Nocturne.Game` (весь рантайм), `Nocturne.Tests.EditMode/PlayMode` (только с `TestAssemblies`, в плеер не утекают), `Nocturne.Editor` (только Editor). Корневой рантайм-asmdef затягивает `Assets/Editor/` в сборку — поэтому Editor-скрипты живут только под `Nocturne.Editor.asmdef`, иначе WebGL-билд падает с `CS0234/CS0246`.
@@ -153,3 +153,17 @@
 
 ### WebGL-приёмка (TZ §2.1)
 - `Build Profiles → WebGL → Build And Run`: меню → уровень → бой/гейты/смерть/финиш без ошибок консоли в Chrome. `preloadedAssets` с actions-ассетом прописывается сам — коммитить.
+
+## P9. Фоновая музыка уровня (плейлист)
+
+### Логика (`AudioManager`, единственный владелец музыки)
+- Режимы не смешиваются: `MainMenu` — `musicTrack + playMusicOnStart` (loop); уровень — `levelPlaylist` (shuffle-очередь без повторов, в конце — новое перемешивание; 1 трек — loop его же). Пустой плейлист — тишина + варнинг, не ошибка.
+- Единственный триггер старта — `GameManager.DismissBriefing()` (кнопка `Начать` = первый жест, иначе WebGL заблокирует звук). Флага автоплейлиста нет.
+- Громкость трека: `effective = globalMusicVolume × track.volume`. Общий регулятор не удалять — он же громкость меню.
+- Пауза с миром: `musicSource.ignoreListenerPause = false`, детект конца — поллинг `!isPlaying` в `Update()` только когда `!AudioListener.pause` + гистерезис 0.5с после старта. `WaitForSecondsRealtime(clip.length)` не использовать (тикает сквозь паузу).
+- `StopMusic(fade)` гасит и отменяет плейлист (иначе поллинг тут же запустит следующий трек). `StopAllCoroutines` на `AudioManager` запрещен — убьет `LoadAfterDelay` переходов сцен.
+
+### Настройка в Editor (`SampleScene → GameSystems → AudioManager`)
+- `Level Playlist → Size = N`, каждому: `Clip` + `Volume` (0..1). `Music Track = None`, `Play Music On Start = false` (это только для меню).
+- Импорт каждого трека: `Vorbis, Compressed, Streaming` (длинные треки нельзя держать декодированными в WebGL), `Load In Background` по вкусу.
+- Проверка за 2 минуты: Play из меню → `Начать` → случайный трек; конец трека → следующий; `Esc` → музыка встала и продолжилась с того же места; смерть → не перезапустилась; разные `Volume` слышно.

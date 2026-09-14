@@ -680,7 +680,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 1.2
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -3579,7 +3579,7 @@ ParticleSystem:
     positionAmount:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.25
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5916,7 +5916,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 1.2
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -8815,7 +8815,7 @@ ParticleSystem:
     positionAmount:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.25
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -10784,16 +10784,30 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'TEAM
 
-    EdwardCreighton, Slaesh
+    EdwardCreighton
+
+    Slaesh
 
 
     ART
 
-    Characters - Mattz Art
-    (xzany)
+    Environment - Slaesh
+
+    Characters
+    - Mattz Art (xzany)
 
 
     AUDIO
+
+    Gnossienne_No. 1 - Erik Satie, Alexandre
+    Tharaud
+
+    Demented Nightmare - Darren Curtis
+
+    Shadows And Dust - Scott
+    Buckley
+
+    Echoes Of Time V2 - Kevin MacLeod
 
     Footsteps - Nox_Sound'
   m_isRightToLeft: 0
@@ -10822,8 +10836,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -11166,7 +11180,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 1.2
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -14065,7 +14079,7 @@ ParticleSystem:
     positionAmount:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.25
       minScalar: 1
       maxCurve:
         serializedVersion: 2

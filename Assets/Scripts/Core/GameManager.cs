@@ -66,6 +66,9 @@ namespace Nocturne.Core
             AudioListener.pause = false;
             Input.UI.Disable();
             SetState(GameState.Playing);
+            // Первый жест пользователя (TZ §2.1) — единственное место старта
+            // фонового плейлиста уровня. Null-safe: без AudioManager просто тишина.
+            AudioManager.StartLevelPlaylist();
         }
 
         /// <summary>Finish trigger entry point (called by FinishPoint, P8).</summary>

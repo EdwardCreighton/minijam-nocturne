@@ -41,9 +41,17 @@ MonoBehaviour:
   enemyAttackCooldown: 1
   playerAttackSound: {fileID: 8300000, guid: 8578d68afc9e9ba448f8d7799d7f7af6, type: 3}
   enemyAttackSound: {fileID: 8300000, guid: bef1ba9fe32409243b56218b67b99e4d, type: 3}
-  combatVolume: 1
+  combatVolume: 0.6
   footstepsSounds:
-  - {fileID: 8300000, guid: c05f412c763c8aa40990f4dd448f83ca, type: 3}
-  - {fileID: 8300000, guid: ef4303796cdfa3248b81bdf139a45e82, type: 3}
+  - {fileID: 8300000, guid: ecd647025e0a3c04fbd5829fff509e09, type: 3}
+  - {fileID: 8300000, guid: 3bd1b93317b7a3a49b13011cdaa64d0b, type: 3}
+  - {fileID: 8300000, guid: 7b4b6eb734482064c8c1e5fd45d4d76c, type: 3}
+  - {fileID: 8300000, guid: fba95cafa5bba8649a7d269656e7317b, type: 3}
+  - {fileID: 8300000, guid: e924ff5d774024542830602ee674d9a9, type: 3}
+  - {fileID: 8300000, guid: 281c105661e5ee14b8e76523200338bd, type: 3}
+  - {fileID: 8300000, guid: 3069c9f7e833f8e4099228c28f9d65dd, type: 3}
+  - {fileID: 8300000, guid: 82354d1fee336984994fbdcc8154c89c, type: 3}
+  - {fileID: 8300000, guid: 068414160a0ccf34ca0c11b55d43ffc8, type: 3}
+  - {fileID: 8300000, guid: 02d4b2dff380d194fab91c0864b0c386, type: 3}
   footstepsPitch: 20
   footstepsInterval: 0.2

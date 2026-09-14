@@ -66,7 +66,7 @@ namespace Nocturne.UI
             {
                 var run = gm.Run;
                 var time = Mathf.FloorToInt(run.RunTime);
-                winText.text = $"Finish: {run.FinishId}\nSpent: {run.SpentTotal}\nDeaths: {run.Deaths}\nTime: {time / 60:00}:{time % 60:00}";
+                winText.text = $"You've escaped the Nightmare!\nSpent: {run.SpentTotal}\nDeaths: {run.Deaths}\nTime: {time / 60:00}:{time % 60:00}";
             }
 
             if (state == GameState.Dying && deathText != null)
